@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome untuk ikon sosial media -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2eTDRq7j4+5bN2V3xS/2/45c7m7u8+T6M4S+D+b2+o7q/6+8x9/6+q/6/8=" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #111827; /* Latar belakang gelap */
+            background-image: url('https://raw.githubusercontent.com/ravejet-project16/anisaramadhanwedding/main/public/assets/images/bg_p.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            overflow: auto;
+        }
+
+        .card-container {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            max-width: 700px;
+            width: 100%;
+        }
+        
+        .card {
+            width: 100%;
+            padding: 2.5rem 2rem;
+            background: #1f2937; /* Warna kartu gelap */
+            background-image: url('https://raw.githubusercontent.com/ravejet-project16/anisaramadhanwedding/main/public/assets/images/bg.jpeg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            color: #e5e7eb; /* Teks terang */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            transform: rotateY(0deg);
+            backface-visibility: hidden;
+            transition: transform 0.8s;
+        }
+        
+        .card-container.is-flipped .card {
+            transform: rotateY(180deg);
+        }
+
+        .card-container.is-flipped .card-back {
+            transform: rotateY(0deg);
+        }
+        
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 2.5rem 2rem;
+            background: #374151; /* Warna kartu belakang sedikit lebih terang */
+            background-image: url('https://raw.githubusercontent.com/ravejet-project16/anisaramadhanwedding/main/public/assets/images/bg.jpeg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            color: #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            transition: transform 0.8s;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 0 1.5rem; /* Tambahkan padding di mobile */
+        }
+
+        @media (min-width: 640px) {
+            .content-wrapper {
+                flex-direction: row;
+                text-align: left;
+                padding-left: 1.5rem; /* Tambahkan padding kiri di desktop */
+                padding-right: 1.5rem; /* Tambahkan padding kanan di desktop */
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            .logo-container {
+                flex-direction: column;
+                margin-bottom: 0;
+                width: 150px;
+                padding-right: 1.5rem; /* Tambahkan padding kanan untuk jarak */
+            }
+        }
+
+        .logo {
+            width: 120px; /* Ukuran logo diperbesar */
+            height: auto; /* Mempertahankan rasio aspek */
+            border-radius: 0; /* Menghilangkan border-radius */
+            border: none; /* Menghilangkan border */
+            transition: transform 0.3s ease-in-out;
+            box-shadow: none; /* Menghilangkan box-shadow */
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-flip {
+            background-color: #000080; /* Warna Navy */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-flip:hover {
+            background-color: #000050; /* Navy lebih gelap saat hover */
+            transform: scale(1.05);
+        }
+
+        /* Aturan baru untuk font judul */
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Properti text-align: justify untuk paragraf */
+        .text-justify {
+            text-align: justify;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .horizontal-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            margin-top: 1rem;
+            padding-bottom: 2rem;
+        }
+        
+        .small-logo {
+            width: 80px;
+            height: auto;
+            border-radius: 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .two-column-text {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .two-column-text {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4">
+
+    <div id="card-container" class="card-container">
+        <!-- Kartu Depan -->
+        <div class="card relative animate-fade-in" id="card-front">
+            
+            <!-- Tambahan: Judul dan deskripsi utama -->
+            <div class="mb-8 text-center">
+                <h1 class="text-3xl sm:text-4xl font-bold mb-2 text-white tracking-wide">Kala Citra</h1>
+                <p class="text-sm sm:text-base text-gray-400 font-medium">Crafting Moments</p>
+            </div>
+
+            <div class="w-full">
+                <!-- Konten Teks -->
+                <div class="text-content p-8">
+                    <h2 class="text-xl sm:text-2xl font-bold mb-2 text-white">The Wedding Of Anisa & Ramadhan</h2>
+                    <p class="text-sm sm:text-base text-gray-300 leading-relaxed mb-6 text-center">Undangan digital ini merupakan hasil kolaborasi kreatif dari tiga entitas dengan keahlian yang saling melengkapi.</p>
+                    <ul class="list-disc list-inside mb-4 text-center">
+                        <li class="inline-block font-bold mx-2">Kala Citra</li>
+                        <li class="inline-block font-bold mx-2">UNSEEN REALITY STUDIO</li>
+                        <li class="inline-block font-bold mx-2">SHEN DIMENSION</li>
+                    </ul>
+
+                    <div class="two-column-text">
+                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed text-justify mb-6">Kala Citra fokus pada pengembangan website untuk event berbasis AI. Sedangkan UNSEEN REALITY STUDIO ahli dalam seni visual dan desain grafis, kemudian SHEN DIMENSION menjadi otak utama produksi dan ekosistem kolaborasi ini. Menjadi sutradara sekaligus produser untuk setiap produk dan jasa yang dihasilkan.</p>
+                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed text-justify">Undangan ini didukung oleh infrastruktur modern menggunakan <span class="font-bold">GitHub</span> untuk manajemen kode dan <span class="font-bold">Netlify</span> untuk deployment, memastikan undangan dapat diakses dengan cepat, aman, dan mudah.</p>
+                    </div>
+                </div>
+                
+                <!-- Kontainer Logo Horizontal -->
+                <div class="horizontal-logos">
+                    <img src="https://raw.githubusercontent.com/ravejet-project16/anisaramadhanwedding/main/public/assets/images/kalacitra.png" alt="Logo Kalacitra" class="small-logo">
+                    <img src="https://raw.githubusercontent.com/ravejet-project16/anisaramadhanwedding/main/public/assets/images/UNSEEN_LOGO_WHITE.png" alt="Logo UNSEEN" class="small-logo">
+                    <img src="https://raw.githubusercontent.com/ravejet-project16/anisaramadhanwedding/main/public/assets/images/LOGO_HEAD_BLACK.png" alt="Logo HEAD" class="small-logo">
+                    <i class="fa-brands fa-github-alt fa-3x text-white"></i>
+                    <img src="https://raw.githubusercontent.com/ravejet-project16/anisaramadhanwedding/main/public/assets/images/Netlify.svg" alt="Logo Netlify" class="small-logo">
+                </div>
+            </div>
+            
+            <button class="btn-flip" onclick="flipCard()">Lihat Kontak</button>
+            <p class="text-sm text-gray-500 mt-1"><a href="index.html">Kembali ke Undangan</a></p>
+        </div>
+
+        <!-- Kartu Belakang -->
+        <div class="card-back absolute">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4 text-white text-center leading-tight">
+                For more informations,<br>you can directly contact - Erick Rchs
+            </h2>
+            <div class="grid grid-cols-2 gap-8 text-sm sm:text-base text-gray-300">
+                <!-- Kolom 1 -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-whatsapp fa-xl text-gray-400"></i>
+                        <a href="https://wa.me/6285603537701" class="hover:underline">0856 0353 7701</a>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-telegram fa-xl text-gray-400"></i>
+                        <a href="https://t.me/Rchs16" class="hover:underline">Erick Rchs</a>
+                    </div>
+                </div>
+                <!-- Kolom 2 -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-instagram fa-xl text-gray-400"></i>
+                        <a href="https://www.instagram.com/erick.pngg?igsh=dG96NXUzaWpteGNo" class="hover:underline">Erick Rchs</a>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-square-facebook fa-xl text-gray-400"></i>
+                        <a href="https://www.facebook.com/share/1B2MGcc3Gj/" class="hover:underline">Erick Rchs</a>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-flip" onclick="flipCard()">Kembali</button>
+        </div>
+    </div>
+
+    <script>
+        const cardContainer = document.getElementById('card-container');
+        function flipCard() {
+            cardContainer.classList.toggle('is-flipped');
+        }
+    </script>
+</body>
+</html>
