@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Ridwan & Syifa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- FONT: Niconne (Judul) dan Poppins (Nama Pengantin) -->
+    <link href="https://fonts.googleapis.com/css2?family=Niconne&family=Inter:wght@300;400;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            /* SKEMA WARNA: Paprika, White, Pastel, Burgundy */
+            --paprika: #AB3021; 
+            --burgundy: #660901; 
+            --pastel: #FFD69B; 
+            
+            --primary-color: #FFFFFF; /* Putih (Teks Utama Hero) */
+            --secondary-color: var(--paprika); /* Paprika (Aksen Utama Tombol, Timeline) */
+            --title-color: var(--burgundy); /* Burgundy (Judul Card, Kontras Kuat) */
+            --font-body: 'Inter', sans-serif;
+            --font-title: 'Niconne', cursive; 
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-color);
+            overflow-x: hidden;
+            background-color: #F8F8F8; /* Light Grey/Putih pudar background */
+        }
+        
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .title-font {
+            font-family: var(--font-title);
+        }
+        
+        /* Filter untuk mengubah SVG menjadi putih (dipakai di Hero Section/background gelap) */
+        .filter-white {
+            filter: brightness(0) invert(1);
+        }
+        
+        /* Filter untuk mengubah SVG menjadi Burgundy (dipakai di Modal/background terang) */
+        .filter-burgundy {
+            filter: invert(7%) sepia(26%) saturate(3000%) hue-rotate(349deg) brightness(80%) contrast(150%);
+        }
+
+        /* --- GLOBAL VIDEO BACKGROUND START --- */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; 
+            overflow: hidden;
+            background-color: #222; /* Fallback color */
+        }
+
+        .video-bg-container video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+
+        .global-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay for better contrast */
+            z-index: -1; 
+        }
+        
+        /* Fallback CSS jika video gagal dimuat */
+        .fallback-bg {
+            background-image: url('https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/main/public/assets/images/bg-min.jpg');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+        /* --- GLOBAL VIDEO BACKGROUND END --- */
+
+        /* Overlay video/image background */
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.4); 
+        }
+
+        /* Card Hero styling (Hanya digunakan di Hero Section) */
+        .card-hero {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Border Putih */
+            color: white;
+        }
+        
+        /* Glassmorphism Footer Styling */
+        .footer-glass {
+            background-color: rgba(255, 255, 255, 0.05); /* Hampir transparan */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3); /* Shadow ke atas */
+            color: white; /* Default text color is white for contrast */
+        }
+        .footer-glass p {
+            color: white !important; /* Memastikan teks di footer putih */
+        }
+
+
+        /* Custom button styling (Paprika) */
+        .btn-custom {
+            background-color: var(--secondary-color); /* Paprika solid */
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-5px);
+            background-color: var(--paprika); /* Tetap Paprika saat hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom card styling (Glassmorphism Putih Transparan) */
+        .card-custom {
+            background-color: rgba(255, 255, 255, 0.9); /* Putih semi-transparan */
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(171, 48, 33, 0.5); /* Border Paprika Halus */
+            color: #333; /* Default dark text inside the card */
+        }
+        
+        /* Mengganti warna teks di dalam card kembali ke dark agar terbaca */
+        .card-custom h2, .card-custom h3 {
+            color: var(--title-color); /* Burgundy */
+        }
+        .card-custom p, .card-custom strong, .card-custom a {
+            color: #333 !important; /* Memaksa teks gelap di dalam card */
+        }
+
+
+        .quote-text {
+            font-style: italic;
+            color: var(--secondary-color); /* Paprika */
+        }
+
+        /* Timeline styling */
+        .timeline {
+            position: relative;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: var(--secondary-color); /* Paprika */
+            border-radius: 9999px;
+            border: 3px solid #F8F8F8; /* Base background color */
+            z-index: 10;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: var(--secondary-color); /* Paprika */
+        }
+
+        /* Music button styling */
+        #music-btn {
+            background-color: var(--secondary-color); /* Paprika */
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+            z-index: 90;
+        }
+
+        #music-btn:hover {
+            transform: scale(1.1);
+            background-color: var(--paprika);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Map link button styling: WARNA PUTIH (FIXED) */
+        .btn-map {
+            background-color: var(--secondary-color); /* Paprika */
+            color: white !important; /* Diubah menjadi Putih */
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.875rem; /* text-sm */
+            margin-top: 0.5rem;
+        }
+
+        .btn-map:hover {
+            transform: scale(1.05);
+            background-color: var(--paprika);
+        }
+        .card-custom .btn-map,
+        .card-custom .btn-map i {
+            color: white !important;
+        }
+
+        /* Footer info button styling */
+        .btn-info {
+            background-color: var(--secondary-color); /* Paprika */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-info:hover {
+            transform: scale(1.05);
+            background-color: var(--paprika);
+        }
+
+        /* Copy button styling */
+        .btn-copy {
+            background-color: var(--secondary-color); /* Paprika */
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            display: inline-block; /* Ensure button behaves correctly */
+        }
+
+        .btn-copy:hover {
+            background-color: var(--paprika);
+            transform: translateY(-2px);
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        /* FIX: Mengatur teks di luar card menjadi Putih */
+        main p {
+            color: white !important;
+        }
+        main h2, main h3 {
+            color: white !important;
+        }
+        main .quote-text {
+            color: var(--secondary-color) !important; /* Quote text tetap Paprika */
+        }
+
+        /* Styling form inputs for readability */
+        #rsvp-guestbook-form input[type="text"], #rsvp-guestbook-form input[type="number"], #rsvp-guestbook-form textarea {
+            background-color: white;
+            border: 1px solid var(--pastel);
+            color: #333;
+        }
+        
+        /* Comment Card Styling */
+        .comment-card p {
+             color: #333 !important; /* Memastikan teks komentar tetap gelap */
+        }
+        .comment-card .font-poppins {
+             color: var(--title-color) !important; /* Warna nama pengirim Burgundy */
+        }
+    </style>
+</head>
+<body id="main-body">
+
+    <!-- GLOBAL VIDEO BACKGROUND -->
+    <div class="video-bg-container" id="video-bg-container">
+        <video autoplay loop muted playsinline id="main-video">
+            <source src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/vd.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+        </video>
+    </div>
+    <div class="global-overlay"></div>
+    
+    <!-- Modal for initial access and music control -->
+    <div id="accessModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4 animate__animated animate__fadeIn">
+        <div class="bg-white rounded-xl shadow-2xl p-4 md:p-8 text-center animate__animated animate__zoomIn flex flex-col items-center z-20">
+            <!-- The Wedding of - SVG (Modal) -->
+            <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/wd.svg" alt="The Wedding of" class="w-48 mb-2 filter-burgundy">
+            
+            <!-- Nama Pengantin - SVG (Modal) -->
+            <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/nm.svg" alt="Ridwan & Syifa" class="w-64 md:w-96 my-2 filter-burgundy">
+            
+            <!-- Tanggal - SVG (Modal) -->
+            <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/tg.svg" alt="21 Desember 2025" class="w-48 my-4 filter-burgundy">
+            
+            <p class="text-sm md:text-base font-bold mb-1 text-gray-800">
+                Kepada Yth.
+            </p>
+            <p id="namaTamu" class="text-3xl md:text-5xl font-extrabold mb-6 text-gray-800 font-poppins">~Nama Tamu~</p>
+            
+            <button id="open-invitation" class="btn-custom transition duration-300 transform hover:-translate-y-1">Buka Undangan</button>
+        </div>
+    </div>
+
+    <!-- Music Button -->
+    <button id="music-btn" class="fixed bottom-5 right-5 z-50 p-3 rounded-full shadow-lg text-white">
+        <i class="fa-solid fa-play"></i>
+    </button>
+
+    <!-- Parallax Hero Section -->
+    <div class="relative min-h-screen hero-overlay flex flex-col items-center justify-center text-white text-center z-10">
+        
+        <div class="absolute inset-0 z-10"></div>
+
+        <div class="relative z-20 w-full flex flex-col items-center justify-center p-6 md:p-12 max-w-2xl mx-auto rounded-3xl card-hero animate__animated animate__fadeInUp">
+            <!-- The Wedding of - SVG (Hero) -->
+            <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/wd.svg" alt="The Wedding of" class="w-48 mb-2 animate__animated animate__fadeInDown filter-white">
+
+            <!-- Nama Pengantin - SVG (Hero) -->
+            <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/nm.svg" alt="Ridwan & Syifa" class="w-64 md:w-96 mb-4 animate__animated animate__fadeInUp filter-white">
+
+            <!-- Tanggal - SVG (Hero) -->
+            <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/tg.svg" alt="21 Desember 2025" class="w-48 my-4 animate__animated animate__fadeInUp animate__delay-1s filter-white">
+            
+            <div id="countdown" class="flex justify-center items-center mt-6 space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
+                <div class="flex flex-col items-center p-3 md:p-4 rounded-xl">
+                    <span id="days" class="text-2xl md:text-4xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1">Hari</span>
+                </div>
+                <div class="flex flex-col items-center p-3 md:p-4 rounded-xl">
+                    <span id="hours" class="text-2xl md:text-4xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1">Jam</span>
+                </div>
+                <div class="flex flex-col items-center p-3 md:p-4 rounded-xl">
+                    <span id="minutes" class="text-2xl md:text-4xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1">Menit</span>
+                </div>
+                <div class="flex flex-col items-center p-3 md:p-4 rounded-xl">
+                    <span id="seconds" class="text-2xl md:text-4xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1">Detik</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 mt-8 z-10 relative">
+        
+        <!-- Galeri Foto - Momen Kami -->
+        <section id="gallery" class="py-16">
+            <div class="text-center">
+                <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-camera-retro mr-2"></i>Momen Kami</h2>
+                <p class="mt-2 max-w-2xl mx-auto" style="color: white !important;">Beberapa kilas balik perjalanan cinta kami.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
+                <div class="gallery-item" data-aos="zoom-in">
+                    <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/f1-min.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x400/AB3021/FFFFFF?text=Foto+1'" alt="Momen 1" class="w-full h-auto rounded-xl object-cover" referrerpolicy="no-referrer">
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/f2-min.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x400/AB3021/FFFFFF?text=Foto+2'" alt="Momen 2" class="w-full h-auto rounded-xl object-cover" referrerpolicy="no-referrer">
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+                    <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/f3-min.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x400/AB3021/FFFFFF?text=Foto+3'" alt="Momen 3" class="w-full h-auto rounded-xl object-cover" referrerpolicy="no-referrer">
+                </div>
+            </div>
+        </section>
+        
+        <!-- About Us Section -->
+        <section id="about" class="py-16">
+            <div class="text-center">
+                <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-heart mr-2"></i>A True Love</h2>
+                <p class="mt-2 max-w-2xl mx-auto" style="color: white !important;">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir." - Q.S Ar-Rum: 21</p>
+            </div>
+            <div class="flex flex-col lg:flex-row items-center justify-center mt-8 gap-8">
+                <div class="w-full lg:w-1/2 card-custom p-6 text-center" data-aos="fade-right">
+                    <!-- Ikon Cincin untuk Pengantin Pria -->
+                    <i class="fa-solid fa-ring text-6xl mb-4" style="color: var(--secondary-color);"></i>
+                    <!-- Jarak diubah dari mt-4 menjadi mt-2 -->
+                    <h3 class="mt-2 text-2xl font-bold font-poppins" style="color: var(--title-color);">Ridwan Ramadhan, S.Pd <br><span class="text-xl">(Ridwan)</span></h3>
+                    <p class="mt-2">Putra dari Bpk Ikin & Ibu Tika</p>
+                    <p class="quote-text mt-4" style="color: var(--secondary-color);">"Dan Masa lalu untuk ku pahami, masa kini untuk ku temani, dan masa depan untuk ku genggam. Seluruhnya, seutuhnya, selamanya."</p>
+                </div>
+                <div class="w-full lg:w-1/2 card-custom p-6 text-center" data-aos="fade-left">
+                    <!-- Ikon Cincin untuk Pengantin Wanita -->
+                    <i class="fa-solid fa-ring text-6xl mb-4" style="color: var(--secondary-color);"></i>
+                    <!-- Jarak diubah dari mt-4 menjadi mt-2 -->
+                    <h3 class="mt-2 text-2xl font-bold font-poppins" style="color: var(--title-color);">Syifa Salamah, S.I.Kom <br><span class="text-xl">(Syifa)</span></h3>
+                    <p class="mt-2">Putri dari Bpk. H. Deden Syarifudien (Alm) & Ibu Nenden Ratmini</p>
+                    <p class="quote-text mt-4" style="color: var(--secondary-color);">"Pada akhirnya pencarianku akan bermuara bukan pada kesempurnaan melainkan penerimaan, pada sosok yang bisa menerimaku dan juga pengingat saat taatku luntur. Karna tak akan aku temukan sosok sempurna untuk dipilih tapi selalu ada sosok yang layak untuk diterima."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="py-16">
+            <div class="text-center">
+                <!-- Teks di luar card diatur ke Putih -->
+                <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-calendar-days mr-2"></i>Rincian Acara</h2>
+                <p class="mt-2 max-w-2xl mx-auto" style="color: white !important;">As We Exchange Our Vows, and Begin A New Journey.</p>
+            </div>
+            <div class="relative mt-8 max-w-2xl mx-auto">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="card-custom p-6 transition duration-300 transform hover:scale-105" data-aos="fade-up">
+                            <h3 class="text-2xl font-bold title-font" style="color: var(--title-color);">Akad Nikah</h3>
+                            <p class="mt-2" style="color: #333;"><i class="fa-solid fa-calendar"></i> <strong>Minggu, 21 Desember 2025</strong><br><i class="fa-regular fa-clock"></i> 09:00 WIB - 10:00 WIB</p>
+                            <p class="mt-1" style="color: #333;"><i class="fa-solid fa-location-dot"></i> Kp. Bojong kalapa RT. 04 RW. 09 Desa Rahayu Kec. Margaasih Kab. Bandung - 40218 (Patokannya jembatan hijau di komplek Taman Kopo Indah V)</p>
+                            <!-- Tombol Lihat di Peta (Ganti teks ke button kecil) -->
+                            <a href="https://maps.app.goo.gl/vSq77T9ULaa8ZnDN6" target="_blank" class="btn-map">
+                                <i class="fa-solid fa-map-location-dot mr-2"></i>Lihat di Peta
+                            </a>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="card-custom p-6 transition duration-300 transform hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+                            <h3 class="text-2xl font-bold title-font" style="color: var(--title-color);">Resepsi Pernikahan</h3>
+                            <p class="mt-2" style="color: #333;"><i class="fa-solid fa-calendar"></i> <strong>Minggu, 21 Desember 2025</strong><br><i class="fa-regular fa-clock"></i> 11:00 WIB - Selesai</p>
+                            <p class="mt-1" style="color: #333;"><i class="fa-solid fa-location-dot"></i> Kp. Bojong kalapa RT. 04 RW. 09 Desa Rahayu Kec. Margaasih Kab. Bandung - 40218 (Patokannya jembatan hijau di komplek Taman Kopo Indah V)</p>
+                            <!-- Tombol Lihat di Peta (Ganti teks ke button kecil) -->
+                            <a href="https://maps.app.goo.gl/vSq77T9ULaa8ZnDN6" target="_blank" class="btn-map">
+                                <i class="fa-solid fa-map-location-dot mr-2"></i>Lihat di Peta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Peta Embed dengan Pinpoint Akurat -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15842.100160533036!2d107.552944!3d-6.963667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwNTcnNDkuMiJTIDEwNwrzMzMnMTAuNiJF!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!id" width="100%" height="200" style="border:0;" class="mt-8 rounded-xl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            
+            <!-- NEW RSVP & GUESTBOOK SECTION - DIGABUNGKAN DI SINI -->
+            <div id="rsvp-guestbook-container" class="mt-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-clipboard-check mr-2"></i>Konfirmasi & Ucapan</h2>
+                    <p class="mt-2 max-w-2xl mx-auto" style="color: white !important;">Mohon konfirmasi kehadiran dan sampaikan ucapan terbaik Anda.</p>
+                </div>
+
+                <div class="max-w-lg mx-auto">
+                    
+                    <!-- Form Gabungan (RSVP, Jumlah Tamu, Pesan) -->
+                    <div class="card-custom p-6 mb-6" data-aos="fade-up">
+                        <form id="rsvp-guestbook-form">
+                            <div class="mb-4">
+                                <label for="form-name" class="block font-poppins font-bold mb-2" style="color: var(--title-color);">Nama Anda:</label>
+                                <input type="text" id="form-name" name="name" required class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-paprika" placeholder="Contoh: Budi & Keluarga">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block font-poppins font-bold mb-2" style="color: var(--title-color);">Apakah Anda Berkenan Hadir?</label>
+                                <div class="flex space-x-4">
+                                    <label class="inline-flex items-center text-gray-800">
+                                        <input type="radio" name="attendance" value="Hadir" required class="form-radio h-5 w-5 text-paprika" checked>
+                                        <span class="ml-2">Ya, Saya Hadir</span>
+                                    </label>
+                                    <label class="inline-flex items-center text-gray-800">
+                                        <input type="radio" name="attendance" value="Tidak Hadir" required class="form-radio h-5 w-5 text-paprika">
+                                        <span class="ml-2">Mohon Maaf, Tidak Hadir</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="guest-count" class="block font-poppins font-bold mb-2" style="color: var(--title-color);">Jumlah Tamu (Termasuk Anda):</label>
+                                <input type="number" id="guest-count" name="guestCount" value="1" min="1" max="5" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-paprika">
+                            </div>
+
+                            <div class="mb-6">
+                                <label for="form-message" class="block font-poppins font-bold mb-2" style="color: var(--title-color);">Pesan & Doa (Opsional):</label>
+                                <textarea id="form-message" name="message" rows="3" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-paprika" placeholder="Selamat menempuh hidup baru..."></textarea>
+                            </div>
+                            
+                            <button type="submit" id="submit-btn" class="btn-custom w-full flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-heart"></i>
+                                <span id="submit-btn-text">Kirim Konfirmasi & Ucapan</span>
+                            </button>
+                        </form>
+                        <div id="rsvp-status-message" class="text-center mt-4 font-poppins font-semibold" style="color: var(--secondary-color); display: none;"></div>
+                    </div>
+                    
+                    <!-- Comments List Container -->
+                    <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto p-2 mt-6 lg:mt-0" data-aos="fade-up">
+                        <p class="text-center italic text-sm" style="color: white;"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat ucapan...</p>
+                    </div>
+                </div>
+            </div>
+            <!-- END NEW RSVP & GUESTBOOK SECTION -->
+        </section>
+
+        <!-- Digital Gift Section -->
+        <section id="gift" class="py-16">
+            <div class="text-center">
+                <!-- Teks di luar card diatur ke Putih -->
+                <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-gift mr-2"></i>Amplop Digital</h2>
+                <p class="mt-2 max-w-2xl mx-auto" style="color: white !important;">Doa dan restu Anda adalah hadiah terindah. Namun, jika Anda berkenan untuk memberi hadiah, bisa melalui:</p>
+            </div>
+            <div class="flex flex-col md:flex-row justify-center items-center mt-8 gap-6">
+                <div class="card-custom p-6 w-full max-w-sm text-center" data-aos="fade-up">
+                    <!-- Ikon Wallet -->
+                    <h3 class="text-xl font-bold font-sans" style="color: var(--title-color);"><i class="fa-solid fa-wallet mr-2"></i>DANA</h3>
+                    <p>A.N. Syifa Salamah</p>
+                    <div class="flex flex-col items-center mt-2">
+                        <p class="text-lg font-bold" style="color: var(--title-color);">
+                            <span id="rekening-syifa-dana">085860555015</span>
+                        </p>
+                        <button class="btn-copy" onclick="copyToClipboard('rekening-syifa-dana')">
+                            Salin
+                        </button>
+                    </div>
+                </div>
+                <div class="card-custom p-6 w-full max-w-sm text-center" data-aos="fade-up" data-aos-delay="200">
+                    <!-- Ikon Bank -->
+                    <h3 class="text-xl font-bold font-sans" style="color: var(--title-color);"><i class="fa-solid fa-building-columns mr-2"></i>SeaBank</h3>
+                    <p>A.N. Ridwan Ramadhan</p>
+                    <div class="flex flex-col items-center mt-2">
+                        <p class="text-lg font-bold" style="color: var(--title-color);">
+                            <span id="rekening-ridwan-seabank">901176323023</span>
+                        </p>
+                        <button class="btn-copy" onclick="copyToClipboard('rekening-ridwan-seabank')">
+                            Salin
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Closing Section -->
+        <section id="closing" class="py-16">
+            <div class="card-custom p-8 max-w-2xl mx-auto" data-aos="zoom-in">
+                <!-- Teks di luar card diatur ke Putih -->
+                <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-gem mr-2"></i>The Wedding Of</h2>
+                <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;">Ridwan & Syifa</h2>
+                <p class="mt-4" style="color: white !important;">
+                    Merupakan suatu kehormatan dan kebahagiaan bagi kami untuk berbagi momen spesial ini bersama Anda. Kehadiran dan doa restu Anda adalah hadiah terindah. Kami menantikan kehadiran Anda.
+                </p>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="text-center py-6 mt-12 footer-glass" id="main-footer">
+        <p>&copy; 2025 The Wedding Of Ridwan & Syifa.</p>
+        <p>Invitation By KalaCitra.</p>
+        <div class="mt-2">
+            <a href="info.html" class="btn-info">Info Undangan</a>
+        </div>
+    </footer>
+
+    <!-- Message box for notifications -->
+    <div id="message-box" class="fixed bottom-5 right-5 z-50 p-4 rounded-lg shadow-lg bg-green-500 text-white animate__animated animate__fadeInRight animate__fadeOutRight" style="display:none;"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Supabase Client Initialization
+        const SUPABASE_URL = 'https://zfsafxsjulxuefhrtsba.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpmc2FmeHNqdWx4dWVmaHJ0c2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM4ODQxNjcsImV4cCI6MjA3OTQ2MDE2N30.Kb0_iPRyARgUf45oYsEeQcso7sOnQW5lkoCl5VEoL3k';
+        
+        // FIX: Inisialisasi Supabase menggunakan window.supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        AOS.init();
+        
+        // --- UTILS ---
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        function showMessage(msg, isError = false) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.innerText = msg;
+            messageBox.style.backgroundColor = isError ? 'rgb(239, 68, 68)' : 'rgb(16, 185, 129)';
+            messageBox.style.display = 'block';
+            
+            messageBox.style.opacity = 1;
+            messageBox.style.pointerEvents = 'auto';
+
+            setTimeout(() => {
+                messageBox.style.opacity = 0;
+                messageBox.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                     messageBox.style.display = 'none';
+                }, 500);
+            }, 3000);
+        }
+        function sanitize(str) {
+            if (!str) return '';
+            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // --- NAMA TAMU LOGIC ---
+        const queryGuestName = getQueryParam('to');
+
+        if (queryGuestName) {
+            document.getElementById('namaTamu').innerText = queryGuestName;
+        } else {
+            document.getElementById('namaTamu').innerText = "~Nama Tamu~";
+        }
+        
+        // --- COUNTDOWN LOGIC ---
+        const eventDate = new Date("Dec 21, 2025 09:00:00").getTime();
+        const countdownElement = document.getElementById("countdown");
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                if (countdownElement) {
+                    countdownElement.innerHTML = "<div>Acara sedang berlangsung!</div>";
+                }
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (document.getElementById("days")) document.getElementById("days").innerHTML = String(days).padStart(2, '0');
+            if (document.getElementById("hours")) document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
+            if (document.getElementById("minutes")) document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
+            if (document.getElementById("seconds")) document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
+        }, 1000);
+
+        // --- COPY TO CLIPBOARD LOGIC ---
+        function copyToClipboard(elementId) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showMessage("Nomor rekening berhasil disalin!", false);
+                    }).catch(err => {
+                        fallbackCopyToClipboard(textToCopy);
+                    });
+                } else {
+                    fallbackCopyToClipboard(textToCopy);
+                }
+            } catch (err) {
+                console.error('Gagal menyalin:', err);
+                showMessage("Gagal menyalin. Silakan salin manual.", true);
+            }
+        }
+
+        function fallbackCopyToClipboard(textToCopy) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showMessage("Nomor rekening berhasil disalin!", false);
+                } else {
+                    showMessage("Gagal menyalin. Silakan salin manual.", true);
+                }
+            } catch (err) {
+                showMessage("Gagal menyalin. Silakan salin manual.", true);
+            }
+            document.body.removeChild(tempInput);
+        }
+        window.copyToClipboard = copyToClipboard; 
+        
+        // --- SUPABASE RSVP & GUESTBOOK LOGIC (Unified) ---
+        const rsvpGuestbookForm = document.getElementById('rsvp-guestbook-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formNameInput = document.getElementById('form-name');
+        const commentsContainer = document.getElementById('comments-container');
+
+        // Function to load comments
+        async function loadComments() {
+            commentsContainer.innerHTML = `<p class="text-center italic text-sm" style="color: white;"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat ucapan...</p>`;
+            
+            // NOTE: Perlu join jika tabel terpisah
+            const { data: comments, error: commentsError } = await supabase
+                .from('comments') 
+                .select('name, message, created_at')
+                .order('created_at', { ascending: false })
+                .limit(50);
+            
+            // Ambil data RSVP untuk status kehadiran
+            const { data: rsvps, error: rsvpsError } = await supabase
+                .from('rsvps')
+                .select('name, attendance')
+                .limit(500); // Ambil semua data RSVP untuk cross-reference
+
+            if (commentsError || rsvpsError) {
+                console.error('Supabase Load Error:', commentsError || rsvpsError);
+                commentsContainer.innerHTML = `<p class="text-center italic text-sm" style="color: red;">Gagal memuat ucapan. Cek RLS Supabase.</p>`;
+                return;
+            }
+
+            if (comments.length === 0) {
+                commentsContainer.innerHTML = `<p class="text-center italic text-sm" style="color: white;">Belum ada ucapan. Jadilah yang pertama!</p>`;
+                return;
+            }
+
+            // Map untuk pencarian cepat status kehadiran
+            const rsvpMap = new Map();
+            rsvps.forEach(r => rsvpMap.set(r.name, r.attendance));
+
+            commentsContainer.innerHTML = ''; 
+            comments.forEach(comment => {
+                const date = comment.created_at ? new Date(comment.created_at).toLocaleDateString('id-ID') : 'Baru saja';
+                const senderName = sanitize(comment.name);
+                const attendanceStatus = rsvpMap.get(senderName) || 'Unknown';
+                
+                let statusBadge = '';
+                let statusClass = 'text-gray-500';
+                
+                if (attendanceStatus === 'Hadir') {
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full text-xs font-semibold" style="background-color: #10b981; color: white;">Hadir</span>'; // Tailwind green
+                } else if (attendanceStatus === 'Tidak Hadir') {
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full text-xs font-semibold" style="background-color: #ef4444; color: white;">Tidak Hadir</span>'; // Tailwind red
+                } else {
+                    statusBadge = '<span class="px-2 py-0.5 rounded-full text-xs font-semibold" style="background-color: #9ca3af; color: white;">?</span>'; // Tailwind gray
+                }
+
+                const commentHtml = `
+                    <div class="comment-card p-4 rounded-lg shadow-md" style="background-color: rgba(255, 255, 255, 0.95); border-left: 5px solid var(--secondary-color);">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="font-poppins font-bold flex items-center" style="color: var(--title-color);">
+                                <i class="fa-solid fa-user mr-2"></i> ${senderName}
+                            </p>
+                            <span class="text-xs text-gray-500">${date}</span>
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                             ${statusBadge}
+                             <span class="text-xs text-gray-500">${date}</span>
+                        </div>
+                        <p class="text-sm italic text-gray-700">${sanitize(comment.message)}</p>
+                    </div>
+                `;
+                commentsContainer.innerHTML += commentHtml;
+            });
+        }
+        
+        // Populate name field
+        if (queryGuestName) {
+            formNameInput.value = queryGuestName;
+        }
+        
+        // Unified Submission Logic
+        rsvpGuestbookForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+            
+            const formData = new FormData(rsvpGuestbookForm);
+            const name = sanitize(formData.get('name').trim());
+            const message = sanitize(formData.get('message').trim());
+            const attendance = formData.get('attendance');
+            const guestCount = parseInt(formData.get('guestCount'), 10);
+
+            if (!name || !attendance) {
+                showMessage("Nama dan konfirmasi kehadiran wajib diisi.", true);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-heart"></i> Kirim Konfirmasi & Ucapan';
+                return;
+            }
+
+            let success = true;
+
+            // 1. Kirim Data RSVP
+            const rsvpData = { 
+                name: name, 
+                attendance: attendance, 
+                guest_count: guestCount,
+                referrer: getQueryParam('from') || 'direct'
+            };
+            const { error: rsvpError } = await supabase.from('rsvps').insert([rsvpData]);
+
+            if (rsvpError) {
+                console.error('Supabase RSVP Error:', rsvpError);
+                showMessage(`Gagal kirim Konfirmasi: ${rsvpError.message}`, true);
+                success = false;
+            }
+
+            // 2. Kirim Data Pesan (hanya jika ada pesan)
+            if (message && message.length > 0) {
+                const commentData = { name: name, message: message };
+                const { error: commentError } = await supabase.from('comments').insert([commentData]);
+
+                if (commentError) {
+                    console.error('Supabase Comment Submit Error:', commentError);
+                    if (success) {
+                        showMessage(`Konfirmasi berhasil, tapi gagal kirim Ucapan: ${commentError.message}`, true);
+                    } else {
+                        showMessage(`Gagal kirim Ucapan dan Konfirmasi.`, true);
+                    }
+                    success = false;
+                }
+            }
+
+            // Final Status Message
+            if (success) {
+                showMessage('Konfirmasi & Ucapan berhasil dikirim! Terima kasih.', false);
+                // Optionally hide form after successful RSVP
+                rsvpGuestbookForm.style.display = 'none';
+                document.getElementById('rsvp-status-message').innerHTML = `Terima kasih, ${name}! Konfirmasi Anda telah kami terima.`;
+                document.getElementById('rsvp-status-message').style.display = 'block';
+                loadComments(); // Reload comments
+            }
+
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-heart"></i> Kirim Konfirmasi & Ucapan';
+        });
+
+        // Load comments on page load
+        if(commentsContainer) {
+            loadComments();
+        }
+
+
+        // --- MUSIC PLAYER LOGIC ---
+        const accessModal = document.getElementById('accessModal');
+        const openInvitationBtn = document.getElementById('open-invitation');
+        const musicBtn = document.getElementById('music-btn');
+        const musicAudio = new Audio('https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/sg.mp3');
+        
+        let isPlaying = false;
+        
+        musicBtn.style.display = 'none';
+
+        if (openInvitationBtn) {
+            openInvitationBtn.addEventListener('click', () => {
+                accessModal.classList.remove('animate__fadeIn');
+                accessModal.classList.add('animate__fadeOut');
+                setTimeout(() => {
+                    accessModal.style.display = 'none';
+                    musicBtn.style.display = 'block';
+                    musicAudio.play().then(() => {
+                        isPlaying = true;
+                        musicBtn.innerHTML = 'Musik <i class="fa-solid fa-pause"></i>';
+                    }).catch(error => {
+                        console.warn("Autoplay musik diblokir:", error);
+                        isPlaying = false;
+                        musicBtn.innerHTML = 'Musik <i class="fa-solid fa-play"></i>';
+                    });
+                }, 500);
+            });
+        }
+
+        if (musicBtn) {
+            musicBtn.addEventListener('click', () => {
+                if (isPlaying) {
+                    musicAudio.pause();
+                    musicBtn.innerHTML = 'Musik <i class="fa-solid fa-play"></i>';
+                } else {
+                    musicAudio.play().then(() => {
+                        musicBtn.innerHTML = 'Musik <i class="fa-solid fa-pause"></i>';
+                    }).catch(error => {
+                        console.error("Gagal memutar musik:", error);
+                        showMessage("Gagal memutar musik.", true);
+                    });
+                }
+                isPlaying = !isPlaying;
+            });
+        }
+
+        // --- VIDEO FALLBACK LOGIC ---
+        const videoContainer = document.getElementById('video-bg-container');
+        const mainBody = document.getElementById('main-body');
+        const mainVideo = document.getElementById('main-video');
+        
+        if (mainVideo) {
+            // Jika video gagal dimuat
+            mainVideo.addEventListener('error', () => {
+                console.error("Video background gagal dimuat. Menggunakan fallback gambar.");
+                videoContainer.style.display = 'none';
+                // Menambahkan kelas CSS fallback
+                mainBody.classList.add('fallback-bg'); 
+            });
+            // Memberi waktu untuk video dimuat
+            setTimeout(() => {
+                 if (mainVideo.readyState < 3) {
+                     // Jika video tidak dimuat tepat waktu
+                     console.warn("Video tidak dimuat tepat waktu. Mengaktifkan fallback.");
+                     videoContainer.style.display = 'none';
+                     mainBody.classList.add('fallback-bg'); 
+                 }
+            }, 3000); 
+        } else {
+             // Jika elemen video tidak ada, gunakan fallback
+             mainBody.classList.add('fallback-bg'); 
+        }
+
+        // Loop musik
+        musicAudio.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+        
+    </script>
+</body>
+</html>

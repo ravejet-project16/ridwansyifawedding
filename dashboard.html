@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Undangan Ridwan & Syifa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            --paprika: #AB3021; 
+            --burgundy: #660901; 
+            --title-color: var(--burgundy);
+            --accent-color: var(--paprika);
+            --bg-light: #f3f4f6;
+            --bg-dark: #1f2937;
+            --text-light: #1f2937;
+            --text-dark: #f3f4f6;
+            --card-light: white;
+            --card-dark: #374151;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        
+        .card {
+            background-color: var(--card-light);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .card {
+            background-color: var(--card-dark);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            color: var(--title-color);
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        body.dark-mode .card-header {
+            color: var(--accent-color);
+            border-bottom-color: #4b5563;
+        }
+        
+        .stat-card {
+            background-color: var(--card-light);
+            border-left: 5px solid var(--accent-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        body.dark-mode .stat-card {
+             background-color: #4b5563;
+        }
+        
+        .stat-hadir { border-left-color: #10b981; } /* Green */
+        .stat-total { border-left-color: #3b82f6; } /* Blue */
+        .stat-tidak { border-left-color: #ef4444; } /* Red */
+        .stat-person { border-left-color: var(--accent-color); } /* Paprika */
+
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: var(--burgundy);
+        }
+        
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+        
+        .btn-action {
+             padding: 0.25rem 0.5rem;
+             font-size: 0.75rem;
+             border-radius: 0.375rem;
+        }
+
+        .comment-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-light); /* Ensures text is readable in light mode */
+        }
+        body.dark-mode .comment-item {
+             border-bottom-color: #4b5563;
+             color: var(--text-dark);
+        }
+        .comment-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .comment-item p.text-sm {
+            color: #4b5563;
+        }
+        body.dark-mode .comment-item p.text-sm {
+            color: #d1d5db;
+        }
+        
+        .comment-item .sender-name {
+            color: var(--title-color);
+        }
+        body.dark-mode .comment-item .sender-name {
+            color: var(--accent-color);
+        }
+
+        /* Adjust input styling for both modes */
+        input[type="text"], input[type="number"], textarea {
+            border: 1px solid #d1d5db;
+            color: #1f2937;
+            background-color: white;
+        }
+        body.dark-mode input[type="text"], body.dark-mode input[type="number"] {
+            background-color: #4b5563;
+            border-color: #6b7280;
+            color: white;
+        }
+        body.dark-mode .comment-list-info {
+            color: var(--text-dark);
+        }
+        body.dark-mode table, body.dark-mode tbody {
+            background-color: #4b5563 !important;
+            color: var(--text-dark);
+        }
+        body.dark-mode thead tr th {
+             background-color: #374151;
+             color: var(--text-dark);
+        }
+        body.dark-mode .divide-gray-200 > tr {
+            border-color: #6b7280;
+        }
+        /* Table Headers for Potential Guests */
+        #potential-guest-list thead tr th {
+             background-color: var(--accent-color) !important;
+             color: white !important;
+        }
+        /* New Guest Form styling */
+        #add-guest-form .form-label {
+            color: var(--text-light);
+        }
+        body.dark-mode #add-guest-form .form-label {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body id="main-body" class="p-6">
+    <header class="text-center mb-10 relative">
+        <h1 class="text-3xl font-extrabold" style="color: var(--title-color);">
+            <i class="fa-solid fa-chart-line mr-2"></i> Wedding Dashboard (Ridwan & Syifa)
+        </h1>
+        <p class="text-gray-600 mt-1">Status dan Statistik Tamu Undangan</p>
+        
+        <!-- Controls: Theme Toggle and View Invitation -->
+        <div id="controls" class="absolute top-0 right-0 flex space-x-2 mt-2 mr-2">
+            <!-- View Invitation Button -->
+            <button id="view-invitation-btn" class="btn-secondary flex items-center text-sm" onclick="window.open('final_undangan.html', '_blank')">
+                <i class="fa-solid fa-eye mr-1"></i> Lihat Undangan
+            </button>
+            <!-- Theme Toggle -->
+            <button id="theme-toggle-btn" class="btn-primary flex items-center text-sm" onclick="toggleTheme()">
+                <i id="theme-icon" class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div id="loading" class="text-center text-xl text-gray-500 my-12">
+        <i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat Data dari Supabase...
+    </div>
+
+    <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+        <strong class="font-bold">Error:</strong>
+        <span class="block sm:inline" id="error-text">Gagal terhubung ke Supabase. Cek Kunci API atau RLS Policy.</span>
+    </div>
+
+    <div id="dashboard-content" class="hidden">
+        
+        <!-- Statistik RSVP -->
+        <section class="mb-10">
+            <h2 class="text-2xl card-header">
+                <i class="fa-solid fa-user-check mr-2"></i> Ringkasan Kehadiran
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="stat-card stat-total">
+                    <p class="text-sm text-gray-500">Total RSVP (Unique Guests)</p>
+                    <p id="stat-total-rsvp" class="text-3xl font-bold mt-1 text-blue-500">0</p>
+                </div>
+                <div class="stat-card stat-hadir">
+                    <p class="text-sm text-gray-500">Akan Hadir</p>
+                    <p id="stat-hadir-count" class="text-3xl font-bold mt-1 text-green-500">0</p>
+                </div>
+                <div class="stat-card stat-person">
+                    <p class="text-sm text-gray-500">Jumlah Tamu (Total Person)</p>
+                    <p id="stat-guest-count" class="text-3xl font-bold mt-1" style="color: var(--accent-color);">0</p>
+                </div>
+                <div class="stat-card stat-tidak">
+                    <p class="text-sm text-gray-500">Tidak Hadir</p>
+                    <p id="stat-tidak-count" class="text-3xl font-bold mt-1 text-red-500">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generator Link Share & Guest Management -->
+        <section class="card mb-10">
+            <h2 class="text-2xl card-header">
+                <i class="fa-solid fa-share-nodes mr-2"></i> Generator Link & Manajemen Tamu Potensial
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Kiri: Link Generator -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--accent-color);">
+                        <i class="fa-solid fa-link mr-2"></i> Buat Link Personal
+                    </h3>
+                    <div class="flex flex-col md:flex-row gap-4 mb-4">
+                        <div class="w-full md:w-1/2">
+                            <label for="guest-name-input" class="form-label block text-sm font-medium text-gray-700 mb-2">Nama Tamu:</label>
+                            <input type="text" id="guest-name-input" placeholder="Nama (misal: Arief & Keluarga)" class="w-full p-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <label for="guest-phone-input" class="form-label block text-sm font-medium text-gray-700 mb-2">Nomor WhatsApp (62...):</label>
+                            <input type="text" id="guest-phone-input" placeholder="628123456789 (untuk WA)" class="w-full p-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                    <div class="w-full mb-4">
+                        <input type="text" id="share-link-output" readonly value="[Base URL Undangan]" class="w-full p-2 border border-gray-300 bg-gray-50 rounded-lg text-sm truncate">
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <button id="copy-link-btn" class="btn-primary flex items-center text-sm w-1/3 justify-center">
+                            <i class="fa-regular fa-copy mr-1"></i> Salin Link
+                        </button>
+                        <button id="send-whatsapp-btn" class="flex items-center text-sm w-2/3 justify-center" style="background-color:#25d366; color:white; padding:0.5rem; border-radius:0.5rem;">
+                            <i class="fa-brands fa-whatsapp mr-1"></i> Kirim Langsung ke WA
+                        </button>
+                    </div>
+
+                </div>
+                
+                <!-- Kanan: Add Guest & Potential List -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--accent-color);">
+                        <i class="fa-solid fa-list-check mr-2"></i> Daftar Tamu Potensial
+                    </h3>
+
+                    <!-- Add New Guest Form -->
+                    <form id="add-guest-form" class="mb-4 p-4 border border-gray-200 rounded-lg">
+                        <h4 class="text-md font-semibold mb-2" style="color: var(--title-color);">Tambah Tamu Baru</h4>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="new-guest-name" placeholder="Nama Tamu" required class="w-full sm:w-2/5 p-2 border border-gray-300 rounded-lg text-sm">
+                            <input type="text" id="new-guest-phone" placeholder="WhatsApp (62...)" class="w-full sm:w-2/5 p-2 border border-gray-300 rounded-lg text-sm">
+                            <button type="submit" id="add-guest-btn" class="btn-primary flex items-center text-sm w-full sm:w-1/5 justify-center">
+                                <i class="fa-solid fa-plus mr-1"></i> Tambah
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Potential Guest List Table -->
+                    <div class="overflow-y-auto max-h-72 border border-gray-200 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-50 sticky top-0">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">WA</th>
+                                    <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="potential-guest-list" class="bg-white divide-y divide-gray-200">
+                                <!-- Potential guests will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daftar Tamu RSVP -->
+        <section class="card mb-10">
+            <h2 class="text-2xl card-header">
+                <i class="fa-solid fa-clipboard-list mr-2"></i> Daftar Tamu Konfirmasi (RSVP)
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Tamu</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Datang</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Konfirmasi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rsvp-list" class="bg-white divide-y divide-gray-200">
+                        <!-- RSVP list will be rendered here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <!-- Daftar Ucapan/Komentar -->
+        <section class="card">
+            <h2 class="text-2xl card-header">
+                <i class="fa-solid fa-comments mr-2"></i> Pesan & Ucapan Terbaru
+            </h2>
+            <p id="comments-list-info" class="text-sm text-gray-500 mb-4">Tombol 'Hapus' memerlukan RLS DELETE Policy di tabel 'comments'.</p>
+            <div id="comments-list">
+                <!-- Komentar akan dimuat di sini -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Message box for notifications -->
+    <div id="message-box" class="fixed bottom-5 right-5 z-50 p-4 rounded-lg shadow-lg text-white hidden" style="background-color: #10b981;"></div>
+
+    <script>
+        // --- SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = 'https://zfsafxsjulxuefhrtsba.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpmc2FmeHNqdWx4dWVmaHJ0c2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM4ODQxNjcsImV4cCI6MjA3OTQ2MDE2N30.Kb0_iPRyARgUf45oYsEeQcso7sOnQW5lkoCl5VEoL3k';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- DOM ELEMENTS ---
+        const loadingEl = document.getElementById('loading');
+        const dashboardContent = document.getElementById('dashboard-content');
+        const errorEl = document.getElementById('error-message');
+        const errorTextEl = document.getElementById('error-text');
+        const rsvpListEl = document.getElementById('rsvp-list');
+        const commentsListEl = document.getElementById('comments-list');
+        const potentialGuestListEl = document.getElementById('potential-guest-list');
+        const addGuestForm = document.getElementById('add-guest-form');
+
+
+        // --- THEME LOGIC ---
+        function toggleTheme() {
+            const body = document.getElementById('main-body');
+            const icon = document.getElementById('theme-icon');
+            const isDark = body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            
+            if (dashboardContent.classList.contains('hidden') === false) {
+                 loadDashboard();
+            }
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('theme');
+            const body = document.getElementById('main-body');
+            const icon = document.getElementById('theme-icon');
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                if (icon) icon.className = 'fa-solid fa-sun';
+            } else {
+                body.classList.remove('dark-mode');
+                if (icon) icon.className = 'fa-solid fa-moon';
+            }
+        }
+        window.onload = loadTheme;
+        window.toggleTheme = toggleTheme;
+
+        // --- UTILS ---
+        function showMessage(msg, isError = false) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.innerText = msg;
+            messageBox.style.backgroundColor = isError ? '#ef4444' : '#10b981';
+            messageBox.classList.remove('hidden');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 3000);
+        }
+
+        function sanitize(str) {
+            if (!str) return '';
+            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+        
+        function formatLinkName(name) {
+            let formattedName = name.replace(/\s/g, '+');
+            formattedName = formattedName.replace(/&/g, 'dan');
+            return encodeURIComponent(formattedName);
+        }
+        
+        // --- DATA FETCHING ---
+        async function fetchData(tableName) {
+            const { data, error } = await supabase
+                .from(tableName)
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error(`Error fetching ${tableName}:`, error);
+                // Display error message specifically for failed SELECT
+                errorTextEl.innerText = `Gagal memuat data ${tableName}: ${error.message}. Pastikan RLS SELECT Policy sudah benar.`;
+                errorEl.classList.remove('hidden');
+                return [];
+            }
+            return data;
+        }
+
+        async function fetchRsvpData() {
+            const data = await fetchData('rsvps');
+            return data;
+        }
+
+        async function fetchCommentsData() {
+            const data = await fetchData('comments');
+            return data;
+        }
+        
+        async function fetchPotentialGuestsData() {
+             const data = await fetchData('potential_guests');
+             return data;
+        }
+
+        // --- DELETE LOGIC ---
+        async function deleteComment(id) {
+            if (!confirm('Anda yakin ingin menghapus pesan ini?')) return;
+            
+            const { error } = await supabase
+                .from('comments')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                console.error('Error deleting comment:', error);
+                showMessage(`Gagal menghapus pesan: ${error.message}. Cek RLS DELETE pada tabel 'comments'.`, true);
+            } else {
+                showMessage('Pesan berhasil dihapus!', false);
+                loadDashboard();
+            }
+        }
+        window.deleteComment = deleteComment;
+        
+        async function deletePotentialGuest(id, name) {
+            if (!confirm(`Anda yakin ingin menghapus tamu potensial: ${name}?`)) return;
+            
+            const { error } = await supabase
+                .from('potential_guests')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                console.error('Error deleting guest:', error);
+                showMessage(`Gagal menghapus tamu: ${error.message}. Cek RLS DELETE pada tabel 'potential_guests'.`, true);
+            } else {
+                showMessage(`Tamu ${name} berhasil dihapus!`, false);
+                loadDashboard();
+            }
+        }
+        window.deletePotentialGuest = deletePotentialGuest;
+
+        // --- RENDERING ---
+        
+        function renderRsvpStats(rsvps) {
+            const stats = { total: rsvps.length, hadir: 0, tidakHadir: 0, totalTamu: 0 };
+
+            rsvps.forEach(rsvp => {
+                if (rsvp.attendance === 'Hadir') {
+                    stats.hadir++;
+                    stats.totalTamu += rsvp.guest_count || 1;
+                } else {
+                    stats.tidakHadir++;
+                }
+            });
+
+            document.getElementById('stat-total-rsvp').innerText = stats.total;
+            document.getElementById('stat-hadir-count').innerText = stats.hadir;
+            document.getElementById('stat-tidak-count').innerText = stats.tidakHadir;
+            document.getElementById('stat-guest-count').innerText = stats.totalTamu;
+        }
+
+        function renderRsvpTable(rsvps) {
+            rsvpListEl.innerHTML = '';
+            const isDark = document.getElementById('main-body').classList.contains('dark-mode');
+            
+            if (rsvps.length === 0) {
+                rsvpListEl.innerHTML = '<tr><td colspan="4" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">Belum ada konfirmasi kehadiran.</td></tr>';
+                return;
+            }
+
+            rsvps.forEach(rsvp => {
+                const date = new Date(rsvp.created_at).toLocaleString('id-ID', {
+                    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+                
+                let statusBadge;
+                let statusColor;
+                if (rsvp.attendance === 'Hadir') {
+                    statusBadge = 'Hadir';
+                    statusColor = 'text-green-500 font-bold';
+                } else {
+                    statusBadge = 'Tidak Hadir';
+                    statusColor = 'text-red-500 font-bold';
+                }
+                
+                const textColor = isDark ? 'text-gray-200' : 'text-gray-900';
+                const dateColor = isDark ? 'text-gray-400' : 'text-gray-500';
+
+                const row = `
+                    <tr class="hover:bg-gray-100 ${isDark ? 'hover:bg-gray-700' : ''}">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${textColor}">${sanitize(rsvp.name)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ${statusColor}">${statusBadge}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ${dateColor}">${rsvp.guest_count || 1}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ${dateColor}">${date}</td>
+                    </tr>
+                `;
+                rsvpListEl.innerHTML += row;
+            });
+        }
+        
+        function renderCommentsList(comments) {
+            commentsListEl.innerHTML = '';
+            const isDark = document.getElementById('main-body').classList.contains('dark-mode');
+            
+            if (comments.length === 0) {
+                commentsListEl.innerHTML = '<p class="text-gray-500 italic comment-list-info">Belum ada pesan yang dikirim.</p>';
+                return;
+            }
+
+            comments.forEach(comment => {
+                const date = new Date(comment.created_at).toLocaleString('id-ID', {
+                    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+                
+                const commentHtml = `
+                    <div class="comment-item">
+                        <div class="flex justify-between items-center text-sm mb-1">
+                            <span class="font-bold sender-name flex items-center">
+                                <i class="fa-solid fa-user-circle mr-2" style="color: var(--accent-color);"></i>
+                                ${sanitize(comment.name)}
+                            </span>
+                            <button onclick="deleteComment(${comment.id})" class="text-xs text-red-500 hover:text-red-700">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Hapus
+                            </button>
+                        </div>
+                        <p class="text-gray-500 text-xs mb-2">${date}</p>
+                        <p class="text-gray-700 text-sm italic whitespace-pre-wrap ${isDark ? 'text-gray-300' : 'text-gray-700'}">${sanitize(comment.message)}</p>
+                    </div>
+                `;
+                commentsListEl.innerHTML += commentHtml;
+            });
+        }
+        
+        function renderPotentialGuestsList(guests) {
+            const listEl = document.getElementById('potential-guest-list');
+            listEl.innerHTML = '';
+            
+            if (guests.length === 0) {
+                listEl.innerHTML = '<tr><td colspan="3" class="px-3 py-2 text-center text-gray-500">Daftar tamu potensial kosong.</td></tr>';
+                return;
+            }
+            
+            guests.forEach(guest => {
+                const waNumber = guest.phone || '-';
+                const row = `
+                    <tr>
+                        <td class="px-3 py-2 text-xs font-medium">${sanitize(guest.name)}</td>
+                        <td class="px-3 py-2 text-xs text-gray-500">${waNumber}</td>
+                        <td class="px-3 py-2 text-center flex space-x-1 justify-center">
+                            <button onclick="setGeneratorInputs('${sanitize(guest.name)}', '${waNumber}')" class="btn-action bg-blue-500 text-white hover:bg-blue-600">
+                                <i class="fa-solid fa-link"></i>
+                            </button>
+                            <button onclick="deletePotentialGuest(${guest.id}, '${sanitize(guest.name)}')" class="btn-action bg-red-500 text-white hover:bg-red-600">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                listEl.innerHTML += row;
+            });
+        }
+        
+        // --- GUEST MANAGEMENT LOGIC ---
+        
+        const guestNameInput = document.getElementById('guest-name-input');
+        const guestPhoneInput = document.getElementById('guest-phone-input');
+        const shareLinkOutput = document.getElementById('share-link-output');
+        
+        function setGeneratorInputs(name, phone) {
+            guestNameInput.value = name;
+            guestPhoneInput.value = phone !== '-' ? phone : '';
+            updateShareLink();
+            showMessage(`Generator diisi dengan data ${name}.`, false);
+        }
+        window.setGeneratorInputs = setGeneratorInputs; // Expose
+
+        addGuestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newName = document.getElementById('new-guest-name').value.trim();
+            const newPhone = document.getElementById('new-guest-phone').value.trim();
+
+            if (!newName) {
+                showMessage('Nama tamu wajib diisi!', true);
+                return;
+            }
+            
+            const addBtn = document.getElementById('add-guest-btn');
+            addBtn.disabled = true;
+            addBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            const { error } = await supabase
+                .from('potential_guests')
+                .insert([{ name: sanitize(newName), phone: sanitize(newPhone) || null }]);
+
+            addBtn.disabled = false;
+            addBtn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> Tambah';
+
+            if (error) {
+                console.error('Error adding guest:', error);
+                showMessage(`Gagal menambah tamu: ${error.message}`, true);
+            } else {
+                showMessage(`Tamu ${newName} berhasil ditambahkan!`, false);
+                addGuestForm.reset();
+                loadDashboard();
+            }
+        });
+
+
+        // --- MAIN LOAD FUNCTION ---
+        async function loadDashboard() {
+            loadingEl.classList.remove('hidden');
+            dashboardContent.classList.add('hidden');
+            errorEl.classList.add('hidden');
+            
+            const [rsvps, comments, potentialGuests] = await Promise.all([
+                fetchRsvpData(),
+                fetchCommentsData(),
+                fetchPotentialGuestsData()
+            ]);
+            
+            // Render statistics
+            renderRsvpStats(rsvps);
+            
+            // Render tables/lists
+            renderRsvpTable(rsvps);
+            renderCommentsList(comments);
+            renderPotentialGuestsList(potentialGuests);
+
+            loadingEl.classList.add('hidden');
+            dashboardContent.classList.remove('hidden');
+        }
+        
+        // --- LINK GENERATOR LOGIC ---
+        // Asumsi BASE_URL adalah URL yang digunakan untuk hosting undangan (perlu diganti user)
+        const BASE_INVITATION_URL = 'https://[your-hosting-domain]/final_undangan.html'; 
+        
+        // NOTE: Agar berfungsi di lingkungan Canvas, user perlu mengganti ini dengan URL undangan mereka
+        if (shareLinkOutput) {
+            shareLinkOutput.value = BASE_INVITATION_URL;
+        }
+
+        function updateShareLink() {
+            const name = guestNameInput.value.trim();
+            let link = BASE_INVITATION_URL;
+
+            if (name) {
+                const encodedName = formatLinkName(name);
+                link = `${BASE_INVITATION_URL}?to=${encodedName}`;
+            }
+            shareLinkOutput.value = link;
+        }
+
+        function sendWhatsApp() {
+            const name = guestNameInput.value.trim();
+            const phone = guestPhoneInput.value.trim().replace(/[^0-9]/g, '');
+            const link = shareLinkOutput.value;
+
+            if (!phone || phone.length < 10) {
+                showMessage('Nomor WhatsApp tidak valid. Gunakan format 62...', true);
+                return;
+            }
+
+            const greeting = name ? `Kepada Yth. ${name},\n` : '';
+            const message = `${greeting}Kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri pernikahan kami. Lihat detail undangan di link berikut:\n\n${link}`;
+            
+            const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        }
+
+
+        if (guestNameInput) {
+            guestNameInput.addEventListener('input', updateShareLink);
+        }
+        
+        const copyLinkBtn = document.getElementById('copy-link-btn');
+        if (copyLinkBtn) {
+            copyLinkBtn.addEventListener('click', () => {
+                shareLinkOutput.select();
+                document.execCommand('copy');
+                showMessage('Link berhasil disalin!', false);
+            });
+        }
+        
+        const sendWhatsappBtn = document.getElementById('send-whatsapp-btn');
+        if (sendWhatsappBtn) {
+             sendWhatsappBtn.addEventListener('click', sendWhatsApp);
+        }
+
+        // --- RUN DASHBOARD ---
+        loadDashboard();
+
+    </script>
+</body>
+</html>
