@@ -182,7 +182,7 @@
         <!-- Controls: Theme Toggle and View Invitation -->
         <div id="controls" class="absolute top-0 right-0 flex space-x-2 mt-2 mr-2">
             <!-- View Invitation Button -->
-            <button id="view-invitation-btn" class="btn-secondary flex items-center text-sm" onclick="window.open('final_undangan.html', '_blank')">
+            <button id="view-invitation-btn" class="btn-secondary flex items-center text-sm" onclick="window.open('index.html', '_blank')">
                 <i class="fa-solid fa-eye mr-1"></i> Lihat Undangan
             </button>
             <!-- Theme Toggle -->
@@ -252,7 +252,7 @@
                         </div>
                     </div>
                     <div class="w-full mb-4">
-                        <input type="text" id="share-link-output" readonly value="[Base URL Undangan]" class="w-full p-2 border border-gray-300 bg-gray-50 rounded-lg text-sm truncate">
+                        <input type="text" id="share-link-output" readonly value="https://ravejet-project16.github.io/ridwansyifawedding/" class="w-full p-2 border border-gray-300 bg-gray-50 rounded-lg text-sm truncate">
                     </div>
 
                     <div class="flex space-x-2">
@@ -671,7 +671,7 @@
         
         // --- LINK GENERATOR LOGIC ---
         // Asumsi BASE_URL adalah URL yang digunakan untuk hosting undangan (perlu diganti user)
-        const BASE_INVITATION_URL = 'https://[your-hosting-domain]/final_undangan.html'; 
+        const BASE_INVITATION_URL = 'https://ravejet-project16.github.io/ridwansyifawedding/'; 
         
         // NOTE: Agar berfungsi di lingkungan Canvas, user perlu mengganti ini dengan URL undangan mereka
         if (shareLinkOutput) {
@@ -730,4 +730,5 @@
 
     </script>
 </body>
+
 </html>
