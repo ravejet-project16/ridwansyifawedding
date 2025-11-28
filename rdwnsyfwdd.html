@@ -37,13 +37,39 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
+            background-color: transparent; /* Ubah jadi transparan agar video terlihat */
             color: var(--text-main);
-            transition: background-color 0.4s ease, color 0.4s ease;
+            transition: color 0.4s ease; /* Transisi background dipindah ke overlay */
+            overflow-x: hidden;
         }
         
         .font-serif { font-family: 'Cormorant Garamond', serif; }
         
+        /* Video Background Styling */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        /* Overlay agar teks tetap terbaca di atas video */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-body);
+            opacity: 0.85; /* Transparansi overlay */
+            z-index: -1;
+            transition: background-color 0.4s ease;
+            backdrop-filter: blur(2px); /* Efek blur dikit biar estetik */
+        }
+
         /* Card Button Styling */
         .portal-card {
             background-color: var(--bg-card);
@@ -57,8 +83,8 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            text-decoration: none; /* Remove underline from links */
-            color: inherit; /* Inherit text color */
+            text-decoration: none;
+            color: inherit;
         }
         
         .portal-card:hover {
@@ -77,7 +103,7 @@
             font-size: 1.5rem;
             margin-right: 1rem;
             transition: all 0.3s ease;
-            flex-shrink: 0; /* Prevent icon from shrinking */
+            flex-shrink: 0;
         }
 
         /* Specific Colors for Icons */
@@ -85,7 +111,7 @@
         .icon-resepsi   { background: rgba(16, 185, 129, 0.1); color: #059669; }
         .icon-tasyakur  { background: rgba(217, 70, 239, 0.1); color: #c026d3; }
         .icon-info      { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
-        .icon-report    { background: rgba(37, 211, 102, 0.1); color: #25D366; } /* Changed to WA Green */
+        .icon-report    { background: rgba(37, 211, 102, 0.1); color: #25D366; }
 
         .portal-card:hover .icon-box {
             transform: scale(1.1) rotate(5deg);
@@ -123,7 +149,7 @@
             margin-bottom: 0.75rem;
         }
         .grid-card-content .chevron-icon {
-            display: none; /* Hide main chevron */
+            display: none;
         }
         .grid-card-content .link-icon {
             margin-top: 0.5rem;
@@ -131,11 +157,89 @@
             transition: transform 0.3s ease;
         }
         .portal-card:hover .link-icon {
-            transform: translateX(2px) translateY(-2px); /* Diagonal move for external link */
+            transform: translateX(2px) translateY(-2px);
+        }
+
+        /* --- LOADING SCREEN STYLES --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-body); /* Masih pakai bg solid agar video tidak bocor pas loading */
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .progress-container {
+            width: 200px;
+            height: 4px;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 99px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        body.dark-mode .progress-container {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--color-paprika);
+            width: 0%;
+            border-radius: 99px;
+            animation: fillBar 3s ease-in-out forwards;
+        }
+
+        @keyframes fillBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .logo-bounce {
+            animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body id="main-body" class="min-h-screen flex flex-col items-center justify-center p-6 relative">
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen">
+        <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/b2e1cb64ed97051cb231ed34b7f0635a897961e1/main/public/assets/images/kalacitra.png" 
+             alt="Kalacitra Logo" 
+             class="w-24 mb-2 logo-bounce"
+             style="filter: var(--image-filter, none);">
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <p class="mt-4 text-xs tracking-widest uppercase opacity-60 font-serif animate-pulse">Memuat...</p>
+    </div>
+
+    <!-- BACKGROUND VIDEO & OVERLAY -->
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/vd.mp4" type="video/mp4">
+        Browser Anda tidak mendukung tag video.
+    </video>
+    <div class="bg-overlay"></div>
 
     <!-- Theme Toggle -->
     <button class="theme-toggle" onclick="toggleTheme()" title="Ubah Tema">
@@ -143,23 +247,23 @@
     </button>
 
     <!-- Main Container -->
-    <div class="w-full max-w-md space-y-8 animate-fade-in my-8">
+    <div class="w-full max-w-md space-y-8 animate-fade-in my-8 relative z-10">
         
         <!-- Header with Images -->
-        <div class="text-center space-y-4 mb-8">
+        <div class="text-center mb-8">
             <!-- Gambar WD Kecil -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/wd.svg" 
                  alt="Wedding" 
-                 class="w-16 md:w-20 mx-auto opacity-80"
-                 style="filter: var(--image-filter, none);"> <!-- Optional: filter for dark mode if needed later -->
+                 class="w-20 md:w-24 mx-auto opacity-80 mb-2"
+                 style="filter: var(--image-filter, none);">
             
             <!-- Gambar Nama Besar -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/nm.svg" 
                  alt="Ridwan & Syifa" 
-                 class="w-48 md:w-64 mx-auto"
+                 class="w-40 md:w-52 mx-auto"
                  style="filter: var(--image-filter, none);">
                  
-            <p class="mt-4" style="color: var(--text-muted);">Portal Akses & Informasi Pernikahan</p>
+            <p class="mt-4" style="color: var(--text-muted); font-weight: 500;">Portal Akses & Informasi Pernikahan</p>
         </div>
 
         <!-- Menu Grid -->
@@ -202,7 +306,7 @@
             </a>
 
             <div class="grid grid-cols-2 gap-4">
-                <!-- 4. Info Undangan (Direct Link ke info.html) -->
+                <!-- 4. Info Undangan -->
                 <a href="info.html" class="portal-card group grid-card-content p-5">
                     <div class="icon-box icon-info">
                         <i class="fa-solid fa-circle-info"></i>
@@ -211,7 +315,7 @@
                     <i class="fa-solid fa-chevron-right text-xs link-icon"></i>
                 </a>
 
-                <!-- 5. Lapor Masalah (Direct Link WhatsApp) -->
+                <!-- 5. Lapor Masalah -->
                 <a href="https://wa.me/6285603537701?text=Halo%20Admin%2C%20saya%20ingin%20melaporkan%20masalah%20pada%20Portal%20Undangan.%20Mohon%20dicek.%20Terima%20kasih." 
                    target="_blank" 
                    class="portal-card group grid-card-content p-5">
@@ -226,7 +330,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="text-center text-xs opacity-50 mt-8">
+        <div class="text-center text-xs opacity-50 mt-8 font-medium">
             &copy; 2025 Portal Ridwan & Syifa <br>
             <div class="flex items-center justify-center gap-1 mt-1">
                 Designed with <i class="fa-solid fa-heart text-red-500"></i> by 
@@ -238,9 +342,23 @@
         </div>
     </div>
 
-    <!-- MODALS REMOVED -->
-
     <script>
+        // --- LOADING SCREEN LOGIC ---
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            // Waktu tunggu 3 detik (3000ms)
+            setTimeout(() => {
+                loadingScreen.classList.add('fade-out');
+                
+                // Hapus element dari DOM setelah animasi fade-out selesai
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500); 
+                
+            }, 3000); 
+        });
+
         // --- THEME LOGIC ---
         function toggleTheme() {
             const body = document.getElementById('main-body');
@@ -263,8 +381,6 @@
                 icon.className = 'fa-solid fa-moon';
             }
         })();
-
-        // --- MODAL & REPORT LOGIC REMOVED ---
     </script>
 </body>
 </html>
