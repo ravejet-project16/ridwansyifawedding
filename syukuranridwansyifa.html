@@ -427,13 +427,13 @@
                             <h3 class="text-2xl font-bold title-font" style="color: var(--title-color);">Syukuran Mempelai Pria</h3>
                             <p class="mt-2" style="color: #333;"><i class="fa-solid fa-calendar"></i> <strong>Minggu, 7 Desember 2025</strong><br><i class="fa-regular fa-clock"></i> 09:00 WIB - 10:00 WIB</p>
                             <p class="mt-1" style="color: #333;"><i class="fa-solid fa-location-dot"></i> Kp. Talun RT. 03 RW. 02 Desa Mekarsari Kec. Cimaung Kab. Bandung - 40374</p>
-                            <a href="https://maps.app.goo.gl/vSq77T9ULaa8ZnDN6" target="_blank" class="btn-map">
+                            <a href="https://goo.gl/maps/Ctsj4EHmvyeMAVp18" target="_blank" class="btn-map">
                                 <i class="fa-solid fa-map-location-dot mr-2"></i>Lihat di Peta
                             </a>
                         </div>
                     </div>
                 </div>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15842.100160533036!2d107.552944!3d-6.963667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwNTcnNDkuMiJTIDEwNwrzMzMnMTAuNiJF!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!id" width="100%" height="200" style="border:0;" class="mt-8 rounded-xl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://maps.google.com/maps?q=Kp.+Talun+RT.+03+RW.+02+Desa+Mekarsari+Kec.+Cimaung+Kab.+Bandung&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="200" style="border:0;" class="mt-8 rounded-xl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             
             <div id="rsvp-guestbook-container" class="mt-12">
@@ -581,7 +581,7 @@
         }
         function sanitize(str) {
             if (!str) return '';
-            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return str.replace(/</g, "<").replace(/>/g, ">");
         }
 
         // --- NAMA TAMU LOGIC ---
@@ -814,7 +814,7 @@
         const accessModal = document.getElementById('accessModal');
         const openInvitationBtn = document.getElementById('open-invitation');
         const musicBtn = document.getElementById('music-btn');
-        const musicAudio = new Audio('https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/418e921f05c2cb7ee4f147129b787bff0031286b/main/public/assets/images/sg.mp3');
+        const musicAudio = new Audio('https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/sg.mp3');
         
         let isPlaying = false;
         
@@ -897,5 +897,4 @@
         
     </script>
 </body>
-
 </html>
