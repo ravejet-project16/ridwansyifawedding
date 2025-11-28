@@ -6,9 +6,7 @@
     <title>Dashboard Admin - Ridwan & Syifa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
@@ -168,6 +166,21 @@
             font-size: 0.85rem;
         }
 
+        /* Checkbox Custom */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+        .checkbox-wrapper input {
+            margin-right: 0.5rem;
+            accent-color: var(--color-paprika);
+            width: 1rem;
+            height: 1rem;
+        }
+
         /* Tables */
         table {
             border-collapse: separate;
@@ -230,7 +243,6 @@
 </head>
 <body id="main-body" class="p-4 md:p-8 min-h-screen">
     
-    <!-- Header Area -->
     <header class="flex flex-col md:flex-row justify-between items-center mb-10 pb-6 border-b border-[var(--border-color)]">
         <div class="text-center md:text-left mb-4 md:mb-0">
             <h1 class="text-3xl md:text-4xl font-bold" style="color: var(--color-paprika);">
@@ -249,7 +261,6 @@
         </div>
     </header>
 
-    <!-- Loading State -->
     <div id="loading" class="flex flex-col items-center justify-center py-20">
         <div class="text-4xl mb-4" style="color: var(--color-paprika);">
             <i class="fa-solid fa-circle-notch fa-spin"></i>
@@ -257,7 +268,6 @@
         <p style="color: var(--text-muted);">Menghubungkan ke Supabase...</p>
     </div>
 
-    <!-- Error State -->
     <div id="error-message" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded shadow-sm" role="alert">
         <div class="flex">
             <div class="py-1"><i class="fa-solid fa-triangle-exclamation mr-3"></i></div>
@@ -268,10 +278,8 @@
         </div>
     </div>
 
-    <!-- Dashboard Content -->
     <div id="dashboard-content" class="hidden animate-fade-in">
         
-        <!-- SECTION 1: Statistik -->
         <section class="mb-10">
             <div class="flex items-center mb-6">
                 <h2 class="text-2xl font-bold font-serif" style="color: var(--text-main);">
@@ -321,7 +329,6 @@
                     </div>
                 </div>
 
-                <!-- Statistik Link Views (Synced with DB) -->
                 <div class="stat-card stat-views">
                     <div class="flex justify-between items-start">
                         <div>
@@ -337,7 +344,6 @@
             </div>
         </section>
 
-        <!-- SECTION 2: Tools (Generator & Guest List) -->
         <section class="card mb-10">
             <h2 class="text-2xl card-header">
                 <span><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Alat & Tamu</span>
@@ -345,14 +351,12 @@
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
-                <!-- Kiri: Link Generator -->
                 <div class="flex flex-col h-full">
                     <h3 class="text-lg font-bold mb-4 flex items-center" style="color: var(--text-main);">
                         Generator Link Undangan
                     </h3>
                     
                     <div class="p-4 rounded-lg flex-grow" style="background-color: var(--hover-bg); border: 1px dashed var(--border-color);">
-                        <!-- Dropdown Acara -->
                         <div class="mb-4">
                             <label for="event-select" class="form-label block mb-2">Pilih Acara</label>
                             <div class="relative">
@@ -395,33 +399,44 @@
                     </div>
                 </div>
                 
-                <!-- Kanan: Database Tamu Potensial -->
                 <div class="flex flex-col h-full">
                     <h3 class="text-lg font-bold mb-4 flex items-center" style="color: var(--text-main);">
                         Database Tamu Potensial
                     </h3>
 
-                    <!-- Add Form -->
-                    <form id="add-guest-form" class="flex gap-2 mb-4">
-                        <input type="text" id="new-guest-name" placeholder="Nama..." required class="flex-grow p-2 text-sm">
-                        <input type="text" id="new-guest-phone" placeholder="WA..." class="w-1/3 p-2 text-sm">
-                        <button type="submit" id="add-guest-btn" class="btn-primary flex items-center justify-center w-12 shadow-sm">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
+                    <form id="add-guest-form" class="flex flex-col gap-3 mb-4">
+                        <div class="flex gap-2">
+                            <input type="text" id="new-guest-name" placeholder="Nama Tamu..." required class="flex-grow p-2 text-sm">
+                            <input type="text" id="new-guest-phone" placeholder="WA (62...)..." class="w-1/3 p-2 text-sm">
+                        </div>
+                        
+                        <!-- NEW FEATURE: Event Checkboxes -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-4">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" id="check-resepsi" checked> Resepsi
+                                </label>
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" id="check-tasyakur"> Tasyakur
+                                </label>
+                            </div>
+                            <button type="submit" id="add-guest-btn" class="btn-primary flex items-center justify-center px-4 py-1.5 shadow-sm text-sm">
+                                <i class="fa-solid fa-plus mr-1"></i> Tambah
+                            </button>
+                        </div>
                     </form>
                     
-                    <!-- Table Container -->
                     <div class="overflow-y-auto max-h-[300px] border border-[var(--border-color)] rounded-lg flex-grow">
                         <table class="w-full text-sm">
                             <thead class="sticky top-0 z-10">
                                 <tr>
                                     <th>Nama</th>
-                                    <th>Kontak</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th>Kirim Undangan</th>
+                                    <th class="text-center w-10">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="potential-guest-list">
-                                <!-- JS Injected -->
+                                <!-- Guests populated by JS -->
                             </tbody>
                         </table>
                     </div>
@@ -429,7 +444,6 @@
             </div>
         </section>
 
-        <!-- SECTION 3: Data RSVP -->
         <section class="card mb-10">
             <h2 class="text-2xl card-header">
                 <span><i class="fa-solid fa-table-list mr-2"></i> Konfirmasi Kehadiran (RSVP)</span>
@@ -445,20 +459,17 @@
                         </tr>
                     </thead>
                     <tbody id="rsvp-list">
-                        <!-- JS Injected -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- SECTION 4: Buku Tamu -->
         <section class="card">
             <h2 class="text-2xl card-header">
                 <span><i class="fa-solid fa-comments mr-2"></i> Ucapan & Doa</span>
             </h2>
             <div class="max-h-[500px] overflow-y-auto pr-2" id="comments-list">
-                <!-- JS Injected -->
-            </div>
+                </div>
         </section>
         
         <footer class="text-center mt-12 mb-6 text-sm opacity-50" style="color: var(--text-muted);">
@@ -467,7 +478,6 @@
 
     </div>
 
-    <!-- Message box -->
     <div id="message-box" class="fixed bottom-6 right-6 z-50 px-6 py-4 rounded-lg text-white hidden font-medium flex items-center shadow-lg transform transition-all duration-300 translate-y-2">
         <span id="msg-icon" class="mr-3 text-xl"></span>
         <span id="msg-text">Notification</span>
@@ -477,7 +487,9 @@
         // --- CONFIGURATION ---
         const SUPABASE_URL = 'https://zfsafxsjulxuefhrtsba.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpmc2FmeHNqdWx4dWVmaHJ0c2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM4ODQxNjcsImV4cCI6MjA3OTQ2MDE2N30.Kb0_iPRyARgUf45oYsEeQcso7sOnQW5lkoCl5VEoL3k';
-        
+        const LINK_RESEPSI = "https://ravejet-project16.github.io/ridwansyifawedding/";
+        const LINK_TASYAKUR = "https://ravejet-project16.github.io/ridwansyifawedding/syukuranridwansyifa.html";
+
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // --- DOM REFERENCES ---
@@ -526,7 +538,7 @@
         function showMessage(msg, isError = false) {
             els.msgText.innerText = msg;
             els.msgIcon.innerHTML = isError ? '<i class="fa-solid fa-circle-xmark"></i>' : '<i class="fa-solid fa-circle-check"></i>';
-            els.msgBox.style.backgroundColor = isError ? '#991B1B' : '#065F46'; // Darker Red/Green for elegance
+            els.msgBox.style.backgroundColor = isError ? '#991B1B' : '#065F46'; 
             
             els.msgBox.classList.remove('hidden', 'translate-y-2', 'opacity-0');
             
@@ -559,41 +571,34 @@
             return data || [];
         }
 
-        // Fetch View Counts (Table: 'counters', Column: 'count', Row Name: 'page_views')
         async function fetchViewCount() {
             try {
                 const { data, error } = await supabase
                     .from('counters')
                     .select('count')
                     .eq('name', 'page_views')
-                    .maybeSingle(); // Use maybeSingle to avoid 406 error if empty
+                    .maybeSingle(); 
 
                 if (error) throw error;
-                
                 const count = data ? data.count : 0;
-                document.getElementById('stat-views-count').innerText = count;
+                
+                const el = document.getElementById('stat-views-count');
+                if(el) el.innerText = count.toLocaleString('id-ID');
+                
                 return count;
             } catch (err) {
-                console.warn("Counter fetch failed (Table might not exist yet):", err.message);
-                document.getElementById('stat-views-count').innerText = "-";
+                console.warn("Counter logic issue:", err.message);
+                const el = document.getElementById('stat-views-count');
+                if(el) el.innerText = "0";
                 return 0;
             }
         }
 
         async function resetViewCount() {
             if (!confirm("Reset jumlah view menjadi 0?")) return;
-            
-            const { error } = await supabase
-                .from('counters')
-                .update({ count: 0 })
-                .eq('name', 'page_views');
-
-            if (error) {
-                showMessage(`Gagal reset: ${error.message}`, true);
-            } else {
-                showMessage("Counter berhasil di-reset!", false);
-                fetchViewCount();
-            }
+            const { error } = await supabase.from('counters').update({ count: 0 }).eq('name', 'page_views');
+            if (error) showMessage(`Gagal reset: ${error.message}`, true);
+            else { showMessage("Counter berhasil di-reset!", false); fetchViewCount(); }
         }
         window.resetViewCount = resetViewCount;
 
@@ -611,10 +616,7 @@
                     else { stats.tidak++; }
 
                     const dateStr = new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
-                    
-                    const badgeClass = isHadir 
-                        ? 'bg-green-100 text-green-800 border-green-200' 
-                        : 'bg-red-100 text-red-800 border-red-200';
+                    const badgeClass = isHadir ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200';
 
                     els.rsvpList.innerHTML += `
                         <tr class="transition-colors">
@@ -626,8 +628,6 @@
                     `;
                 });
             }
-
-            // Update Stats UI
             document.getElementById('stat-total-rsvp').innerText = stats.total;
             document.getElementById('stat-hadir-count').innerText = stats.hadir;
             document.getElementById('stat-tidak-count').innerText = stats.tidak;
@@ -649,14 +649,13 @@
                             <span class="comment-date">${dateStr}</span>
                         </div>
                         <p class="text-sm italic opacity-80 mb-2">"${sanitize(c.message)}"</p>
-                        <button onclick="deleteItem('comments', ${c.id})" class="text-xs text-red-500 hover:text-red-700 opacity-60 hover:opacity-100 transition-opacity">
-                            Hapus Pesan
-                        </button>
+                        <button onclick="deleteItem('comments', ${c.id})" class="text-xs text-red-500 hover:text-red-700 opacity-60 hover:opacity-100 transition-opacity">Hapus Pesan</button>
                     </div>
                 `;
             });
         }
 
+        // --- MODIFIED RENDER: DIRECT WA BUTTONS ---
         function renderPotential(guests) {
             els.potentialList.innerHTML = '';
             if (guests.length === 0) {
@@ -664,14 +663,43 @@
                 return;
             }
             guests.forEach(g => {
+                // Determine buttons based on category (stored as string "Resepsi", "Tasyakur", or "Resepsi, Tasyakur")
+                const categories = g.category ? g.category.split(', ') : ['Resepsi']; // Default to Resepsi if null
+                let btnHtml = '';
+
+                // Generate button HTML
+                if(categories.includes('Resepsi')) {
+                    btnHtml += `
+                        <button onclick="directSend('${sanitize(g.name)}', '${g.phone}', 'Resepsi')" class="inline-flex items-center px-2 py-1 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs rounded mr-1 mb-1 transition-colors" title="WA Resepsi">
+                            <i class="fa-brands fa-whatsapp mr-1"></i> Resepsi
+                        </button>`;
+                }
+                if(categories.includes('Tasyakur')) {
+                    btnHtml += `
+                        <button onclick="directSend('${sanitize(g.name)}', '${g.phone}', 'Tasyakur')" class="inline-flex items-center px-2 py-1 bg-[#128C7E] hover:bg-[#0e6f64] text-white text-xs rounded mr-1 mb-1 transition-colors" title="WA Tasyakur">
+                            <i class="fa-brands fa-whatsapp mr-1"></i> Tasyakur
+                        </button>`;
+                }
+                if(!btnHtml) {
+                    // Fallback button if no category
+                     btnHtml += `
+                        <button onclick="fillGenerator('${sanitize(g.name)}', '${g.phone||''}')" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded hover:bg-gray-200">
+                             Manual
+                        </button>`;
+                }
+
                 els.potentialList.innerHTML += `
                     <tr>
-                        <td class="font-medium">${sanitize(g.name)}</td>
-                        <td class="text-xs font-mono opacity-70">${g.phone || '-'}</td>
-                        <td class="text-center flex justify-center gap-2">
-                            <button onclick="fillGenerator('${sanitize(g.name)}', '${g.phone||''}')" class="btn-action bg-blue-50 text-blue-600 hover:bg-blue-100" title="Buat Link">
-                                <i class="fa-solid fa-link"></i>
-                            </button>
+                        <td class="font-medium align-middle">
+                            ${sanitize(g.name)}
+                            <div class="text-[10px] opacity-60 font-mono mt-0.5">${g.phone || '-'}</div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="flex flex-wrap">
+                                ${btnHtml}
+                            </div>
+                        </td>
+                        <td class="text-center align-middle">
                             <button onclick="deleteItem('potential_guests', ${g.id})" class="btn-action bg-red-50 text-red-600 hover:bg-red-100" title="Hapus">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
@@ -679,6 +707,26 @@
                     </tr>
                 `;
             });
+        }
+
+        // --- NEW: DIRECT SEND FUNCTION ---
+        window.directSend = (name, phone, type) => {
+            if(!phone || phone.length < 5) {
+                showMessage("Nomor WA tidak valid.", true);
+                return;
+            }
+
+            // Clean Phone Number
+            let cleanPhone = phone.replace(/[^0-9]/g, '');
+            if(cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+
+            const baseUrl = type === 'Resepsi' ? LINK_RESEPSI : LINK_TASYAKUR;
+            const separator = baseUrl.includes('?') ? '&' : '?';
+            const finalLink = `${baseUrl}${separator}to=${encodeURIComponent(name.replace(/\s/g, '+').replace(/&/g, 'dan'))}`;
+            
+            const message = `Kepada Yth. ${name},\n\nKami mengundang Anda untuk hadir di acara ${type} pernikahan kami. Info lengkap:\n${finalLink}\n\nTerima kasih.`;
+            
+            window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
         // --- ACTIONS ---
@@ -717,9 +765,7 @@
 
         els.guestName.addEventListener('input', updateLink);
         els.eventSelect.addEventListener('change', updateLink);
-        
-        // Initial Link Set
-        updateLink();
+        updateLink(); // Init
 
         document.getElementById('copy-link-btn').addEventListener('click', () => {
             els.shareLink.select();
@@ -741,30 +787,52 @@
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
         });
 
-        // Add Guest Handler
+        // --- UPDATED: ADD GUEST HANDLER ---
         els.guestForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('new-guest-name').value.trim();
             const phone = document.getElementById('new-guest-phone').value.trim();
+            const isResepsi = document.getElementById('check-resepsi').checked;
+            const isTasyakur = document.getElementById('check-tasyakur').checked;
             
             if(!name) return;
+            if(!isResepsi && !isTasyakur) {
+                showMessage("Pilih minimal satu acara (Resepsi/Tasyakur)", true);
+                return;
+            }
+
+            // Construct Category String
+            let categories = [];
+            if(isResepsi) categories.push('Resepsi');
+            if(isTasyakur) categories.push('Tasyakur');
+            const categoryString = categories.join(', '); // Save as "Resepsi", "Tasyakur", or "Resepsi, Tasyakur"
             
             const btn = document.getElementById('add-guest-btn');
             const originalIcon = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             btn.disabled = true;
 
-            const { error } = await supabase.from('potential_guests').insert([{ name, phone }]);
+            // INSERT with CATEGORY
+            // Note: User must add 'category' column to 'potential_guests' table in Supabase
+            const { error } = await supabase.from('potential_guests').insert([{ 
+                name: name, 
+                phone: phone,
+                category: categoryString 
+            }]);
             
             btn.innerHTML = originalIcon;
             btn.disabled = false;
 
             if(error) {
-                showMessage(`Gagal simpan: ${error.message}`, true);
+                console.error(error);
+                showMessage(`Gagal: Pastikan ada kolom 'category' di database.`, true);
             } else {
                 showMessage("Tamu berhasil ditambahkan.");
                 els.guestForm.reset();
-                loadData(); // Partial reload could be optimized, but full reload is safer for consistency
+                // Reset checkboxes to default
+                document.getElementById('check-resepsi').checked = true;
+                document.getElementById('check-tasyakur').checked = false;
+                loadData(); 
             }
         });
 
