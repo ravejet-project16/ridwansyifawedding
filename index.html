@@ -9,11 +9,9 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- FONT: Niconne (Judul) dan Poppins (Nama Pengantin) -->
     <link href="https://fonts.googleapis.com/css2?family=Niconne&family=Inter:wght@300;400;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
@@ -315,7 +313,6 @@
 </head>
 <body id="main-body">
 
-    <!-- GLOBAL VIDEO BACKGROUND -->
     <div class="video-bg-container" id="video-bg-container">
         <video autoplay loop muted playsinline id="main-video">
             <source src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/vd.mp4" type="video/mp4">
@@ -324,16 +321,12 @@
     </div>
     <div class="global-overlay"></div>
     
-    <!-- Modal for initial access and music control -->
     <div id="accessModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4 animate__animated animate__fadeIn">
         <div class="bg-white rounded-xl shadow-2xl p-4 md:p-8 text-center animate__animated animate__zoomIn flex flex-col items-center z-20">
-            <!-- The Wedding of - SVG (Modal) -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/wd.svg" alt="The Wedding of" class="w-48 mb-2 filter-burgundy">
             
-            <!-- Nama Pengantin - SVG (Modal) -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/nm.svg" alt="Ridwan & Syifa" class="w-64 md:w-96 my-2 filter-burgundy">
             
-            <!-- Tanggal - SVG (Modal) -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/tg.svg" alt="21 Desember 2025" class="w-48 my-4 filter-burgundy">
             
             <p class="text-sm md:text-base font-bold mb-1 text-gray-800">
@@ -345,24 +338,19 @@
         </div>
     </div>
 
-    <!-- Music Button -->
     <button id="music-btn" class="fixed bottom-5 right-5 z-50 p-3 rounded-full shadow-lg text-white">
         <i class="fa-solid fa-play"></i>
     </button>
 
-    <!-- Parallax Hero Section -->
     <div class="relative min-h-screen hero-overlay flex flex-col items-center justify-center text-white text-center z-10">
         
         <div class="absolute inset-0 z-10"></div>
 
         <div class="relative z-20 w-full flex flex-col items-center justify-center p-6 md:p-12 max-w-2xl mx-auto rounded-3xl card-hero animate__animated animate__fadeInUp">
-            <!-- The Wedding of - SVG (Hero) -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/wd.svg" alt="The Wedding of" class="w-48 mb-2 animate__animated animate__fadeInDown filter-white">
 
-            <!-- Nama Pengantin - SVG (Hero) -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/nm.svg" alt="Ridwan & Syifa" class="w-64 md:w-96 mb-4 animate__animated animate__fadeInUp filter-white">
 
-            <!-- Tanggal - SVG (Hero) -->
             <img src="https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/tg.svg" alt="21 Desember 2025" class="w-48 my-4 animate__animated animate__fadeInUp animate__delay-1s filter-white">
             
             <div id="countdown" class="flex justify-center items-center mt-6 space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
@@ -388,7 +376,6 @@
 
     <main class="container mx-auto px-4 mt-8 z-10 relative">
         
-        <!-- Galeri Foto - Momen Kami -->
         <section id="gallery" class="py-16">
             <div class="text-center">
                 <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-camera-retro mr-2"></i>Momen Kami</h2>
@@ -407,7 +394,6 @@
             </div>
         </section>
         
-        <!-- About Us Section -->
         <section id="about" class="py-16">
             <div class="text-center">
                 <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-heart mr-2"></i>A True Love</h2>
@@ -415,17 +401,13 @@
             </div>
             <div class="flex flex-col lg:flex-row items-center justify-center mt-8 gap-8">
                 <div class="w-full lg:w-1/2 card-custom p-6 text-center" data-aos="fade-right">
-                    <!-- Ikon Cincin untuk Pengantin Pria -->
                     <i class="fa-solid fa-ring text-6xl mb-4" style="color: var(--secondary-color);"></i>
-                    <!-- Jarak diubah dari mt-4 menjadi mt-2 -->
                     <h3 class="mt-2 text-2xl font-bold font-poppins" style="color: var(--secondary-color);">Ridwan Ramadhan, S.Pd <br><span class="text-xl">(Ridwan)</span></h3>
                     <p class="mt-2">Putra dari Bpk Ikin & Ibu Tika</p>
                     <p class="quote-text mt-4" style="color: var(--secondary-color);">"Dan Masa lalu untuk ku pahami, masa kini untuk ku temani, dan masa depan untuk ku genggam. Seluruhnya, seutuhnya, selamanya."</p>
                 </div>
                 <div class="w-full lg:w-1/2 card-custom p-6 text-center" data-aos="fade-left">
-                    <!-- Ikon Cincin untuk Pengantin Wanita -->
                     <i class="fa-solid fa-ring text-6xl mb-4" style="color: var(--secondary-color);"></i>
-                    <!-- Jarak diubah dari mt-4 menjadi mt-2 -->
                     <h3 class="mt-2 text-2xl font-bold font-poppins" style="color: var(--secondary-color);">Syifa Salamah, S.I.Kom <br><span class="text-xl">(Syifa)</span></h3>
                     <p class="mt-2">Putri dari Bpk. H. Deden Syarifudien (Alm) & Ibu Nenden Ratmini</p>
                     <p class="quote-text mt-4" style="color: var(--burgundy);">"Pada akhirnya pencarianku akan bermuara bukan pada kesempurnaan melainkan penerimaan, pada sosok yang bisa menerimaku dan juga pengingat saat taatku luntur. Karna tak akan aku temukan sosok sempurna untuk dipilih tapi selalu ada sosok yang layak untuk diterima."</p>
@@ -433,10 +415,8 @@
             </div>
         </section>
 
-        <!-- Events Section -->
         <section id="events" class="py-16">
             <div class="text-center">
-                <!-- Teks di luar card diatur ke Putih -->
                 <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-calendar-days mr-2"></i>Rincian Acara</h2>
                 <p class="mt-2 max-w-2xl mx-auto" style="color: white !important;">As We Exchange Our Vows, and Begin A New Journey.</p>
             </div>
@@ -447,7 +427,6 @@
                             <h3 class="text-2xl font-bold title-font" style="color: var(--title-color);">Akad Nikah</h3>
                             <p class="mt-2" style="color: #333;"><i class="fa-solid fa-calendar"></i> <strong>Minggu, 21 Desember 2025</strong><br><i class="fa-regular fa-clock"></i> 09:00 WIB - 10:00 WIB</p>
                             <p class="mt-1" style="color: #333;"><i class="fa-solid fa-location-dot"></i> Kp. Bojong kalapa RT. 04 RW. 09 Desa Rahayu Kec. Margaasih Kab. Bandung - 40218 (Patokannya jembatan hijau di komplek Taman Kopo Indah V)</p>
-                            <!-- Tombol Lihat di Peta (Ganti teks ke button kecil) -->
                             <a href="https://maps.app.goo.gl/vSq77T9ULaa8ZnDN6" target="_blank" class="btn-map">
                                 <i class="fa-solid fa-map-location-dot mr-2"></i>Lihat di Peta
                             </a>
@@ -458,18 +437,15 @@
                             <h3 class="text-2xl font-bold title-font" style="color: var(--title-color);">Resepsi Pernikahan</h3>
                             <p class="mt-2" style="color: #333;"><i class="fa-solid fa-calendar"></i> <strong>Minggu, 21 Desember 2025</strong><br><i class="fa-regular fa-clock"></i> 11:00 WIB - Selesai</p>
                             <p class="mt-1" style="color: #333;"><i class="fa-solid fa-location-dot"></i> Kp. Bojong kalapa RT. 04 RW. 09 Desa Rahayu Kec. Margaasih Kab. Bandung - 40218 (Patokannya jembatan hijau di komplek Taman Kopo Indah V)</p>
-                            <!-- Tombol Lihat di Peta (Ganti teks ke button kecil) -->
                             <a href="https://maps.app.goo.gl/vSq77T9ULaa8ZnDN6" target="_blank" class="btn-map">
                                 <i class="fa-solid fa-map-location-dot mr-2"></i>Lihat di Peta
                             </a>
                         </div>
                     </div>
                 </div>
-                <!-- Peta Embed dengan Pinpoint Akurat -->
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15842.100160533036!2d107.552944!3d-6.963667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwNTcnNDkuMiJTIDEwNwrzMzMnMTAuNiJF!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!id" width="100%" height="200" style="border:0;" class="mt-8 rounded-xl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             
-            <!-- NEW RSVP & GUESTBOOK SECTION - DIGABUNGKAN DI SINI -->
             <div id="rsvp-guestbook-container" class="mt-12">
                 <div class="text-center mb-8">
                     <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-clipboard-check mr-2"></i>Konfirmasi & Ucapan</h2>
@@ -478,7 +454,6 @@
 
                 <div class="max-w-lg mx-auto">
                     
-                    <!-- Form Gabungan (RSVP, Jumlah Tamu, Pesan) -->
                     <div class="card-custom p-6 mb-6" data-aos="fade-up">
                         <form id="rsvp-guestbook-form">
                             <div class="mb-4">
@@ -518,25 +493,20 @@
                         <div id="rsvp-status-message" class="text-center mt-4 font-poppins font-semibold" style="color: var(--secondary-color); display: none;"></div>
                     </div>
                     
-                    <!-- Comments List Container -->
                     <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto p-2 mt-6 lg:mt-0" data-aos="fade-up">
                         <p class="text-center italic text-sm" style="color: white;"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat ucapan...</p>
                     </div>
                 </div>
             </div>
-            <!-- END NEW RSVP & GUESTBOOK SECTION -->
-        </section>
+            </section>
 
-        <!-- Digital Gift Section -->
         <section id="gift" class="py-16">
             <div class="text-center">
-                <!-- Teks di luar card diatur ke Putih -->
                 <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: white !important;"><i class="fa-solid fa-gift mr-2"></i>Amplop Digital</h2>
                 <p class="mt-2 max-w-2xl mx-auto" style="color: white !important;">Doa dan restu Anda adalah hadiah terindah. Namun, jika Anda berkenan untuk memberi hadiah, bisa melalui:</p>
             </div>
             <div class="flex flex-col md:flex-row justify-center items-center mt-8 gap-6">
                 <div class="card-custom p-6 w-full max-w-sm text-center" data-aos="fade-up">
-                    <!-- Ikon Wallet -->
                     <h3 class="text-xl font-bold font-sans" style="color: var(--burgundy);"><i class="fa-solid fa-wallet mr-2"></i>DANA</h3>
                     <p>A.N. Syifa Salamah</p>
                     <div class="flex flex-col items-center mt-2">
@@ -549,7 +519,6 @@
                     </div>
                 </div>
                 <div class="card-custom p-6 w-full max-w-sm text-center" data-aos="fade-up" data-aos-delay="200">
-                    <!-- Ikon Bank -->
                     <h3 class="text-xl font-bold font-sans" style="color: var(--title-color);"><i class="fa-solid fa-building-columns mr-2"></i>SeaBank</h3>
                     <p>A.N. Ridwan Ramadhan</p>
                     <div class="flex flex-col items-center mt-2">
@@ -564,10 +533,8 @@
             </div>
         </section>
 
-        <!-- Closing Section -->
         <section id="closing" class="py-16">
             <div class="card-custom p-8 max-w-2xl mx-auto" data-aos="zoom-in">
-                <!-- Teks di luar card diatur ke Putih -->
                 <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: var(--burgundy) !important;"><i class="fa-solid fa-gem mr-2"></i>The Wedding Of</h2>
                 <h2 class="text-3xl md:text-4xl font-bold title-font" style="color: var(--burgundy) !important;">Ridwan & Syifa</h2>
                 <p class="mt-4" style="color: var(--burgundy) !important;">
@@ -579,14 +546,13 @@
     </main>
     
     <footer class="text-center py-6 mt-12 footer-glass" id="main-footer">
-        <p>&copy; 2025 The Wedding Of Ridwan & Syifa.</p>
+        <p>© 2025 The Wedding Of Ridwan & Syifa.</p>
         <p>Invitation By KalaCitra.</p>
         <div class="mt-2">
             <a href="info.html" class="btn-info">Info Undangan</a>
         </div>
     </footer>
 
-    <!-- Message box for notifications -->
     <div id="message-box" class="fixed bottom-5 right-5 z-50 p-4 rounded-lg shadow-lg bg-green-500 text-white animate__animated animate__fadeInRight animate__fadeOutRight" style="display:none;"></div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -625,7 +591,7 @@
         }
         function sanitize(str) {
             if (!str) return '';
-            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return str.replace(/</g, "<").replace(/>/g, ">");
         }
 
         // --- NAMA TAMU LOGIC ---
@@ -860,7 +826,7 @@
         const accessModal = document.getElementById('accessModal');
         const openInvitationBtn = document.getElementById('open-invitation');
         const musicBtn = document.getElementById('music-btn');
-        const musicAudio = new Audio('https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/418e921f05c2cb7ee4f147129b787bff0031286b/main/public/assets/images/sg.mp3');
+        const musicAudio = new Audio('https://raw.githubusercontent.com/ravejet-project16/ridwansyifawedding/28396a48e01f9c6b1a3a74e9abdc641a68f7db6b/main/public/assets/images/sg.mp3');
         
         let isPlaying = false;
         
@@ -935,7 +901,29 @@
             this.play();
         }, false);
         
+        // --- VIEW COUNTER LOGIC (Atomic RPC) ---
+        async function trackVisit() {
+            // Cek apakah user ini sudah dihitung di sesi browser ini?
+            if (sessionStorage.getItem('has_visited')) {
+                console.log("Kunjungan sudah tercatat di sesi ini.");
+                return; 
+            }
+
+            // Panggil fungsi RPC 'increment_page_view' yang sudah dibuat di SQL Editor
+            const { error } = await supabase.rpc('increment_page_view');
+
+            if (error) {
+                console.error("Gagal mencatat view:", error);
+            } else {
+                console.log("View +1 berhasil!");
+                // Tandai user ini sudah berkunjung
+                sessionStorage.setItem('has_visited', 'true');
+            }
+        }
+
+        // Jalankan tracker saat halaman dimuat
+        trackVisit();
+        
     </script>
 </body>
 </html>
-
